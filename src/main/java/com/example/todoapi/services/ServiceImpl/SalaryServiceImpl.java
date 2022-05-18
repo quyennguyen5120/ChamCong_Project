@@ -1,24 +1,25 @@
 package com.example.todoapi.services.ServiceImpl;
 
 import com.example.todoapi.dtos.SalaryDto;
-import com.example.todoapi.dtos.StaffDTO;
+import com.example.todoapi.dtos.TimekeepingDTO;
 import com.example.todoapi.entities.SalaryEntity;
-import com.example.todoapi.entities.StaffEntity;
-import com.example.todoapi.entities.UserEntity;
 import com.example.todoapi.repositories.SalaryRepository;
+import com.example.todoapi.repositories.TimeKeepingRepository;
 import com.example.todoapi.services.SalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
 public class SalaryServiceImpl implements SalaryService {
     @Autowired
     SalaryRepository salaryRepository;
+    @Autowired
+    TimeKeepingRepository timeKeepingRepository;
+
     public List<SalaryDto> getAll(){
         return  salaryRepository.getAll();
     }
@@ -47,5 +48,11 @@ public class SalaryServiceImpl implements SalaryService {
         salaryEntity.setSalary(salaryDto.getSalary());
         salaryRepository.save(salaryEntity);
         return new SalaryDto(salaryEntity);
+    }
+
+    public SalaryDto calculateSalary(Long staffId){
+        List<TimekeepingDTO> timekeepingDTO = timeKeepingRepository.findByStaffId(staffId);
+        
+        return null;
     }
 }

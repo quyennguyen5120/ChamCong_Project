@@ -14,6 +14,8 @@ public interface TimeKeepingService {
 
     TimekeepingDTO getByStaff(Long staffId);
 
+    List<TimekeepingDTO> getByAllStaff();
+
     TimekeepingDTO lamthem(Long staffId, Long sogio);
 
     TimekeepingDTO xinvesom(Long staffId);

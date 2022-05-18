@@ -153,4 +153,42 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
         timekeepingDTO.setDays(integers);
         return timekeepingDTO;
     }
+
+    @Override
+    public TimekeepingDTO lamthem(Long staffId, Long sogio) {
+        String bacz= LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        Date dtz = new Date(bacz);
+        Date dt = new Date(bacz);
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+        Timekeeping timekeepingz = timeKeepingRepository.findTimeKeepingByDay(dtz, dt , staffId);
+        if(timekeepingz != null){
+            timekeepingz.setLamthem(sogio * 60);
+            timekeepingz =timeKeepingRepository.save(timekeepingz);
+            return new TimekeepingDTO(timekeepingz);
+        }
+        return null;
+    }
+
+    @Override
+    public TimekeepingDTO xinvesom(Long staffId) {
+        String bacz= LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        Date dtz = new Date(bacz);
+        Date dt = new Date(bacz);
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+        Timekeeping timekeepingz = timeKeepingRepository.findTimeKeepingByDay(dtz, dt , staffId);
+        if(timekeepingz != null){
+            timekeepingz.setXinVeSom(true);
+            timekeepingz =timeKeepingRepository.save(timekeepingz);
+            return new TimekeepingDTO(timekeepingz);
+        }
+        return null;
+    }
 }

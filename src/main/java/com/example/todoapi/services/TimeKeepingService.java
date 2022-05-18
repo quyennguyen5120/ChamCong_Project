@@ -13,4 +13,8 @@ public interface TimeKeepingService {
     List<TimekeepingDTO> findByEnabled(TimeKeepingInputDto timeKeepingInputDto);
 
     TimekeepingDTO getByStaff(Long staffId);
+
+    TimekeepingDTO lamthem(Long staffId, Long sogio);
+
+    TimekeepingDTO xinvesom(Long staffId);
 }

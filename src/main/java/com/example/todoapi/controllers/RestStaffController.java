@@ -4,6 +4,7 @@ import com.example.todoapi.dtos.ResponseDto;
 import com.example.todoapi.dtos.StaffDTO;
 import com.example.todoapi.services.ServiceImpl.StaffServiceImpl;
 import com.example.todoapi.services.StaffService;
+import com.example.todoapi.services.UserService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class RestStaffController {
     @Autowired
     StaffService staffService;
+
     @GetMapping
     public ResponseEntity<?> getAllStaff() {
         return ResponseEntity.ok(staffService.getAll());
@@ -36,5 +38,8 @@ public class RestStaffController {
     public ResponseEntity<?> findByIdStaff(@PathVariable("id") Long id){
         return ResponseEntity.ok(staffService.findById(id));
     }
-
+    @GetMapping("/getAllUser/{id}")
+    public ResponseEntity<?> getAllUserByRoles(@PathVariable("id") int id){
+        return ResponseEntity.ok(staffService.findAllByIdRole(id));
+    }
 }

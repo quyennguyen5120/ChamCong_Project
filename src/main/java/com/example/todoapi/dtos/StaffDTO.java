@@ -24,6 +24,7 @@ public class StaffDTO {
     private UserDTO userDTO;
     private UserDTO userParentDTO;
     private Set<TimekeepingDTO> timekeeping;
+    private TimekeepingDTO timekeepingConvert;
 
 
     public StaffDTO(StaffEntity staffEntity){

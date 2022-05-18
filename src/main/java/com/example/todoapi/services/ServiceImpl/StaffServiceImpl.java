@@ -10,6 +10,7 @@ import com.example.todoapi.repositories.RoleRepository;
 import com.example.todoapi.repositories.StaffRepository;
 import com.example.todoapi.repositories.UserRepository;
 import com.example.todoapi.services.StaffService;
+import com.example.todoapi.services.TimeKeepingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ public class StaffServiceImpl implements StaffService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    TimeKeepingService timeKeepingService;
 
 
     public List<StaffDTO> getAll(){
@@ -36,7 +39,15 @@ public class StaffServiceImpl implements StaffService {
     }
 
     public StaffDTO findById(Long id){
-        return new StaffDTO(staffRepository.findById(id).get());
+        StaffEntity staff = new StaffEntity();
+        staff = staffRepository.findById(id).get();
+        if(staff == null){
+            return null;
+        }
+        StaffDTO staffDTO = new StaffDTO(staff);
+        TimekeepingDTO timekeepingDTO = timeKeepingService.getByStaff(staff.getId());
+        staffDTO.setTimekeepingConvert(timekeepingDTO);
+        return staffDTO;
     }
 
     public boolean deleteById(Long id){

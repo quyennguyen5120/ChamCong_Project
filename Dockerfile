@@ -1,4 +1,5 @@
-FROM openjdk:11
-ADD target/TodoAPI-0.0.1-SNAPSHOT.jar TodoAPI-0.0.1-SNAPSHOT.jar
+FROM openjdk:11-jdk
+WORKDIR jar
+COPY target/spring-rest-api-0.0.1-SNAPSHOT.jar /app-jar/spring-rest-api.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "TodoAPI-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/app-jar/spring-rest-api.jar"]

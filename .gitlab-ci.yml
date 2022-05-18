@@ -1,0 +1,50 @@
+variables:
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA #unix id
+  JAR: "jar"
+  NGINX: "nginx"
+
+stages:
+  - build-jar
+  - deploy
+
+buildJar:
+  stage: build-jar
+  tags:
+    - spring
+  only:
+    - /^live_[0-9]+(?:.[0-9]+)+$/ # regular expression live_0.0.1, live_0.0.2, live_0.0.3, etc.
+  script:
+    - echo "Building Jar"
+    - mvn clean install -DskipTests #build file jar
+    - echo "Build Jar Image" #start build image jar
+    - docker build -t $TAG_COMMIT$JAR . #build image jar
+    - echo "Build Nginx Image" #start build image nginx
+    - docker build -t $TAG_COMMIT$NGINX ./nginx #build image nginx
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY #login vào docker registry cua gitlab ci/cd
+    - docker push $TAG_COMMIT$JAR #push image jar
+    - docker push $TAG_COMMIT$NGINX #push image nginx
+    - echo "Build Complete"
+
+deploy:
+  stage: deploy
+  tags:
+    - spring
+  only:
+    - /^live_[0-9]+(?:.[0-9]+)+$/ # regular expression live_0.0.1, live_0.0.2, live_0.0.3, etc.
+  script:
+    - echo "Deploying"
+    - echo $SERVER_USER
+    - echo $SERVER_HOST
+    - echo $GITLAB_CI_SSH_KEY
+    - chmod 600 $GITLAB_CI_SSH_KEY
+    - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker pull $TAG_COMMIT$JAR"
+    - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker container rm -f spring-boot-app || true"
+    - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker run -d -p 8080:8080 --name spring-boot-app --network="host" $TAG_COMMIT$JAR"
+    - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker pull $TAG_COMMIT$NGINX"
+    - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker container rm -f nginx-app || true"
+    - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker run -d -p 80:80 --network="host" --name nginx-app $TAG_COMMIT$NGINX"
+    - echo "Deploy Complete"
+  environment:
+    name: production
+    url: http://$SERVER_HOST

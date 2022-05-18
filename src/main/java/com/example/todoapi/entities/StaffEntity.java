@@ -24,6 +24,9 @@ public class StaffEntity extends BaseEntity{
     private Integer age;
     private String address;
 
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    private SalaryEntity salaryEntity;
+
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private UserEntity userEntity;
 

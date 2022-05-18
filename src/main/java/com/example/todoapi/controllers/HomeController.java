@@ -5,11 +5,13 @@ import com.example.todoapi.dtos.LoginRequest;
 import com.example.todoapi.dtos.SignupRequest;
 import com.example.todoapi.entities.RefreshToken;
 import com.example.todoapi.entities.RoleEntity;
+import com.example.todoapi.entities.StaffEntity;
 import com.example.todoapi.entities.UserEntity;
 import com.example.todoapi.jwt.JwtUtils;
 import com.example.todoapi.payload.request.TokenRefreshRequest;
 import com.example.todoapi.payload.response.TokenRefreshResponse;
 import com.example.todoapi.repositories.RoleRepository;
+import com.example.todoapi.repositories.StaffRepository;
 import com.example.todoapi.repositories.UserRepository;
 import com.example.todoapi.services.RefreshTokenService;
 import com.example.todoapi.services.UserDetailsImpl;
@@ -42,6 +44,10 @@ public class HomeController {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    StaffRepository staffRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -56,9 +62,9 @@ public class HomeController {
                 .collect(Collectors.toList());
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-
+        StaffEntity staff = staffRepository.getStaffByUserId(userDetails.getId());
         return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
-                userDetails.getUsername(), userDetails.getEmail(), roles));
+                userDetails.getUsername(), userDetails.getEmail(), roles, staff.getId()));
     }
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshtoken(@RequestBody TokenRefreshRequest request) {
@@ -73,16 +79,16 @@ public class HomeController {
                 .orElseThrow(null);
     }
 
-//    @GetMapping("/add")
-//    public String addUser(){
-//        RoleEntity roleUser = roleRepository.findByName("ROLE_USER");
-//        UserEntity user = new UserEntity();
-//        user.setUsername("user");
-//        user.setPassword("123");
-//        user.setRoles(Set.of(roleUser));
-//        userRepository.save(user);
-//        return "";
-//    }
+    @GetMapping("/add")
+    public String addUser(){
+        RoleEntity roleUser = roleRepository.findByName("ROLE_USER");
+        UserEntity user = new UserEntity();
+        user.setUsername("userz");
+        user.setPassword(passwordEncoder.encode("123"));
+        user.setRoles(Set.of(roleUser));
+        userRepository.save(user);
+        return "";
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest){

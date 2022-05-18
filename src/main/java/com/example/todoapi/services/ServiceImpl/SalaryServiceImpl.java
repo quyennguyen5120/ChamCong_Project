@@ -3,6 +3,7 @@ package com.example.todoapi.services.ServiceImpl;
 import com.example.todoapi.dtos.SalaryDto;
 import com.example.todoapi.dtos.TimekeepingDTO;
 import com.example.todoapi.entities.SalaryEntity;
+import com.example.todoapi.entities.Timekeeping;
 import com.example.todoapi.repositories.SalaryRepository;
 import com.example.todoapi.repositories.TimeKeepingRepository;
 import com.example.todoapi.services.SalaryService;
@@ -10,6 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -51,8 +57,13 @@ public class SalaryServiceImpl implements SalaryService {
     }
 
     public SalaryDto calculateSalary(Long staffId){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         List<TimekeepingDTO> timekeepingDTO = timeKeepingRepository.findByStaffId(staffId);
-        
+        for (TimekeepingDTO t: timekeepingDTO){
+            LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
+            LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
+            long daysBetween = Duration.between(startTime, endTime).toMinutes();
+        }
         return null;
     }
 }

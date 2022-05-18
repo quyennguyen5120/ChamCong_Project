@@ -32,6 +32,12 @@ public class StaffDTO {
         this.email = staffEntity.getEmail();
         this.age = staffEntity.getAge();
         this.timekeeping = staffEntity.getTimekeeping().stream().map(x -> new TimekeepingDTO(x)).collect(Collectors.toSet());
+        UserDTO user= new UserDTO();
+        user.setId(staffEntity.getUserEntity().getId());
+        user.setUsername(staffEntity.getUserEntity().getUsername());
+        user.setEmail(staffEntity.getUserEntity().getEmail());
+        user.setPassword(staffEntity.getUserEntity().getPassword());
+        this.userDTO = user;
     }
 
 }

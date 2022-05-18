@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "role")
@@ -18,4 +19,6 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @ManyToMany
+    private Set<UserEntity> userEntitys;
 }

@@ -22,6 +22,7 @@ public class StaffDTO {
     private Integer age;
     private String address;
     private UserDTO userDTO;
+    private UserDTO userParentDTO;
     private Set<TimekeepingDTO> timekeeping;
 
 
@@ -32,12 +33,21 @@ public class StaffDTO {
         this.email = staffEntity.getEmail();
         this.age = staffEntity.getAge();
         this.timekeeping = staffEntity.getTimekeeping().stream().map(x -> new TimekeepingDTO(x)).collect(Collectors.toSet());
+
         UserDTO user= new UserDTO();
         user.setId(staffEntity.getUserEntity().getId());
         user.setUsername(staffEntity.getUserEntity().getUsername());
         user.setEmail(staffEntity.getUserEntity().getEmail());
         user.setPassword(staffEntity.getUserEntity().getPassword());
         this.userDTO = user;
+
+        UserDTO userParent= new UserDTO();
+        userParent.setId(staffEntity.getUserEntity().getId());
+        userParent.setUsername(staffEntity.getUserEntity().getUsername());
+        userParent.setEmail(staffEntity.getUserEntity().getEmail());
+        userParent.setPassword(staffEntity.getUserEntity().getPassword());
+        this.userParentDTO = userParent;
+
     }
 
 }

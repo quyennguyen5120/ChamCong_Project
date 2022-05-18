@@ -71,10 +71,8 @@ public class StaffServiceImpl implements StaffService {
             userEntity.setEmail(staffDTO.getUserDTO().getEmail());
             userEntity.setPassword(staffDTO.getUserDTO().getPassword());
             userEntity.setUsername(staffDTO.getUserDTO().getUsername());
-            Set<RoleEntity> list = new HashSet<>();
-
-            list.add(roleRepository.findById(3).get());
-            userEntity.setRoles(list);
+            userEntity.setRoles(Set.of(roleRepository.findByName("ROLE_USER")));
+            userRepository.save(userEntity);
             staffEntity.setUserEntity(userEntity);
         }
 

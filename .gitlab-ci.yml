@@ -36,7 +36,7 @@ deploy:
     - echo $SERVER_USER
     - echo $SERVER_HOST
     - echo $GITLAB_CI_SSH_KEY
-#    - chmod 600 $GITLAB_CI_SSH_KEY
+    - chmod 600 $GITLAB_CI_SSH_KEY
     - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker pull $TAG_COMMIT$JAR"
     - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker container rm -f spring-boot-app || true"

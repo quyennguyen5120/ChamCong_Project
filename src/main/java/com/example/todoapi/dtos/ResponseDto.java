@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.lang.reflect.Array;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,8 +20,6 @@ public class ResponseDto {
         this.result = result;
         this.data = data;
     }
-
-
     public static ResponseDto of(Object data, String prefix) {
         return new ResponseDto(data != null ? prefix.concat(" successfully!") : prefix.concat(" failed!"), data != null ? "SUCCESS" : "ERROR", data);
     }

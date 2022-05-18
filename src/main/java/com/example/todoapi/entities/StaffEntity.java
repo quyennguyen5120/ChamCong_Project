@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "staff")
@@ -24,5 +26,8 @@ public class StaffEntity extends BaseEntity{
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private UserEntity userEntity;
+
+    @OneToMany(mappedBy = "staff", cascade=CascadeType.REMOVE)
+    private Set<Timekeeping> timekeeping;
 
 }

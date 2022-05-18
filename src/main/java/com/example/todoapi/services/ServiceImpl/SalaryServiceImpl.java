@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -56,14 +57,17 @@ public class SalaryServiceImpl implements SalaryService {
         return new SalaryDto(salaryEntity);
     }
 
-    public SalaryDto calculateSalary(Long staffId){
+    public List<Double> calculateSalary(Long staffId){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         List<TimekeepingDTO> timekeepingDTO = timeKeepingRepository.findByStaffId(staffId);
+        List<Double> listHeSoCong = new ArrayList<>();
         for (TimekeepingDTO t: timekeepingDTO){
             LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
             LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
-            long daysBetween = Duration.between(startTime, endTime).toMinutes();
+            double daysBetween = Duration.between(startTime, endTime).toMinutes();
+            daysBetween = daysBetween / 60;
+            listHeSoCong.add(daysBetween);
         }
-        return null;
+        return listHeSoCong;
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/staff")
 public class RestStaffController {
     @Autowired
-    StaffServiceImpl staffService;
+    StaffService staffService;
     @GetMapping
     public ResponseEntity<?> getAllStaff() {
         return ResponseEntity.ok(staffService.getAll());

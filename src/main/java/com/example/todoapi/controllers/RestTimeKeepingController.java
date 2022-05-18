@@ -28,7 +28,7 @@ public class RestTimeKeepingController {
 //    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/logout/{staffId}", method = RequestMethod.GET)
     public ResponseEntity<?> logoutTimeKeeping(@PathVariable("staffId") Long staffId){
-        return ResponseEntity.ok(timeKeepingService.requestTimeKeeping(staffId));
+        return ResponseEntity.ok(timeKeepingService.logoutTimeKeeping(staffId));
     }
 
 //    @Secured({"ROLE_ADMIN", "ROLE_USER"})

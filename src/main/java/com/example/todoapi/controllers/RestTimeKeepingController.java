@@ -19,19 +19,25 @@ public class RestTimeKeepingController {
     @Autowired
     TimeKeepingService timeKeepingService;
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+//    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/{staffId}", method = RequestMethod.GET)
     public ResponseEntity<?> requestTimeKeeping(@PathVariable("staffId") Long staffId){
         return ResponseEntity.ok(timeKeepingService.requestTimeKeeping(staffId));
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+//    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    @RequestMapping(value = "/logout/{staffId}", method = RequestMethod.GET)
+    public ResponseEntity<?> logoutTimeKeeping(@PathVariable("staffId") Long staffId){
+        return ResponseEntity.ok(timeKeepingService.requestTimeKeeping(staffId));
+    }
+
+//    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/enable/{timekeepingId}", method = RequestMethod.GET)
     public ResponseEntity<?> enableTimeKeeping(@PathVariable("timekeepingId") Long timekeepingId){
         return ResponseEntity.ok(timeKeepingService.enableTimeKeeping(timekeepingId));
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+//    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/searchByDto", method = RequestMethod.POST)
     public ResponseEntity<?> enableTimeKeeping(@RequestBody TimeKeepingInputDto timeKeepingInputDto){
         return ResponseEntity.ok(timeKeepingService.findByEnabled(timeKeepingInputDto));

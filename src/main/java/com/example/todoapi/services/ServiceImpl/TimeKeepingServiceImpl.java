@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,12 +34,40 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
 
     @Override
     public TimekeepingDTO requestTimeKeeping(Long staffId) {
-        StaffEntity staff = staffRepository.getById(staffId);
         Timekeeping timekeeping = new Timekeeping();
-        timekeeping.setTimeStart((Timestamp) new Date());
+        timekeeping.setTimeStart(new Date());
+        StaffEntity staff = staffRepository.getById(staffId);
+
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY,8);
+        cal.set(Calendar.MINUTE,30);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
+        Date d = cal.getTime();
+        if(d.getTime() < now.getTime()){
+            Long minutis = (now.getTime() - d.getTime()) / 1000 / 60;
+            timekeeping.setDimuon(minutis);
+        }
         timekeeping.setStaff(staff);
         timekeeping.setIsActive(false);
         timekeeping = timeKeepingRepository.save(timekeeping);
+        return new TimekeepingDTO(timekeeping);
+    }
+
+    @Override
+    public TimekeepingDTO logoutTimeKeeping(Long staffId) {
+        String oldstring = new Date().toString();
+        LocalDateTime startDate = LocalDateTime.parse(oldstring, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDateTime endDate = LocalDateTime.parse(oldstring, DateTimeFormatter.ofPattern("yyyy-MM-dd")).plusDays(1);
+        Timekeeping timekeeping = timeKeepingRepository.findTimeKeepingByDay(startDate.toString(), endDate.toString() , staffId);
+        if(timekeeping != null){
+            timekeeping.setEndStart(new Date());
+            timekeeping = timeKeepingRepository.save(timekeeping);
+        }
+        else{
+            return null;
+        }
         return new TimekeepingDTO(timekeeping);
     }
 

@@ -70,12 +70,13 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
         if (timeKeepingInputDto.getIs_Active() != null) {
             q.setParameter("isActive",timeKeepingInputDto.getIs_Active());
         }
-
         if(timeKeepingInputDto.getStartDate() != null){
-            whereClause += " and (t.timeStart = :timeStart)";
+            Date date = new Date(timeKeepingInputDto.getStartDate());
+            q.setParameter("timeStart",date);
         }
         if(timeKeepingInputDto.getEndDate() != null){
-            whereClause += " and (t.endStart = :endStart)";
+            Date date = new Date(timeKeepingInputDto.getEndDate());
+            q.setParameter("endStart",date);
         }
         return q.getResultList();
     }

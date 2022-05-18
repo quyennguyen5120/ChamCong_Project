@@ -32,7 +32,7 @@ public class RestTimeKeepingController {
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @RequestMapping(value = "/findStaffEnable", method = RequestMethod.POST)
+    @RequestMapping(value = "/searchByDto", method = RequestMethod.POST)
     public ResponseEntity<?> enableTimeKeeping(@RequestBody TimeKeepingInputDto timeKeepingInputDto){
         return ResponseEntity.ok(timeKeepingService.findByEnabled(timeKeepingInputDto));
     }

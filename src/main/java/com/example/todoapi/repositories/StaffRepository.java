@@ -14,5 +14,6 @@ public interface StaffRepository extends JpaRepository<StaffEntity, Long> {
     @Query("select new com.example.todoapi.dtos.StaffDTO(s) from StaffEntity s ")
     List<StaffDTO> getAll();
 
-
+    @Query("select s from StaffEntity s where s.userEntity.id = ?1")
+    StaffEntity getStaffByUserId(Long id);
 }

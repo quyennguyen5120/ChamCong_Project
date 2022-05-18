@@ -78,7 +78,7 @@ public class StaffServiceImpl implements StaffService {
             staffEntity.setUserEntity(userEntity);
         }
 
-        if (staffDTO.getUserParentDTO().getId() != null){
+        if (staffDTO.getUserParentDTO() != null && staffDTO.getUserParentDTO().getId() != null){
             staffEntity.setSubUserEntity(userRepository.findById(staffDTO.getUserParentDTO().getId()).get());
         }else {
             System.out.println("ko co UserParentDTO");

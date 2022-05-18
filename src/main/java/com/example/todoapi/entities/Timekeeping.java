@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Builder
-public class Timekeeping {
+public class Timekeeping extends BaseEntity{
     @Id
     @GeneratedValue
     private Long id;
@@ -25,6 +25,18 @@ public class Timekeeping {
 
     @Column(name = "end_start")
     private Date endStart;
+
+    @Column(name = "lamthem")
+    private Long lamthem;
+
+    @Column(name = "dimuon")
+    private Long dimuon;
+
+    @Column(name = "vesom")
+    private Long vesom;
+
+    @Column(name = "lamviec")
+    private Long lamviec;
 
     @Column(name = "is_active")
     private Boolean isActive;

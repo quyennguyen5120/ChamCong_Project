@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface TimeKeepingService {
     TimekeepingDTO requestTimeKeeping(Long staffId);
+    TimekeepingDTO logoutTimeKeeping(Long staffId);
     TimekeepingDTO enableTimeKeeping(Long timeKeepingId);
 
     List<TimekeepingDTO> findByEnabled(TimeKeepingInputDto timeKeepingInputDto);

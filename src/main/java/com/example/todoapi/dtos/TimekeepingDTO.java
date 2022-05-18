@@ -23,7 +23,6 @@ public class TimekeepingDTO {
     private Date endStart;
     private Boolean is_Active;
     private StaffDTO staffDTO;
-    private String description;
 
 
     public TimekeepingDTO(Timekeeping timekeeping){
@@ -31,7 +30,6 @@ public class TimekeepingDTO {
         this.timeStart = timekeeping.getTimeStart();
         this.endStart = timekeeping.getEndStart();
         this.is_Active = timekeeping.getIsActive();
-        this.description = timekeeping.getDescription();
         StaffDTO s = new StaffDTO();
         s.setAddress(timekeeping.getStaff().getAddress());
         s.setAge(timekeeping.getStaff().getAge());

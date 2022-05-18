@@ -11,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -18,10 +19,9 @@ import java.sql.Timestamp;
 @Builder
 public class TimekeepingDTO {
     private Long id;
-
-    private Timestamp timeStart;
-
-    private Timestamp endStart;
+    private Date timeStart;
+    private Date endStart;
+    private Boolean is_Active;
     private StaffDTO staffDTO;
 
 
@@ -29,6 +29,7 @@ public class TimekeepingDTO {
         this.id = timekeeping.getId();
         this.timeStart = timekeeping.getTimeStart();
         this.endStart = timekeeping.getEndStart();
+        this.is_Active = timekeeping.getIsActive();
         StaffDTO s = new StaffDTO();
         s.setAddress(timekeeping.getStaff().getAddress());
         s.setAge(timekeeping.getStaff().getAge());

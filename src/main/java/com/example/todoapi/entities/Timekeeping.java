@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "timekeeping")
@@ -20,10 +21,10 @@ public class Timekeeping {
     private Long id;
 
     @Column(name = "time_start")
-    private Timestamp timeStart;
+    private Date timeStart;
 
     @Column(name = "end_start")
-    private Timestamp endStart;
+    private Date endStart;
 
     @Column(name = "is_active")
     private Boolean isActive;

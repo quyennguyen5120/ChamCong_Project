@@ -25,6 +25,9 @@ public class Timekeeping {
     @Column(name = "end_start")
     private Timestamp endStart;
 
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     @ManyToOne(cascade = CascadeType.REMOVE)
     private StaffEntity staff;
 

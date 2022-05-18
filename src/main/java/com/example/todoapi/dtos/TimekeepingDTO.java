@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +24,9 @@ public class TimekeepingDTO {
     private Date endStart;
     private Boolean is_Active;
     private StaffDTO staffDTO;
-
+    private String description;
+    private Boolean isComplete;
+    private List<Integer> days;
 
     public TimekeepingDTO(Timekeeping timekeeping){
         this.id = timekeeping.getId();

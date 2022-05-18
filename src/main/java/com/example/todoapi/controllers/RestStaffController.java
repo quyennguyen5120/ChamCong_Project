@@ -31,7 +31,7 @@ public class RestStaffController {
         return ResponseEntity.ok(staffService.deleteById(id));
     }
 
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> findByIdStaff(@PathVariable("id") Long id){
         return ResponseEntity.ok(staffService.findById(id));
     }

@@ -11,5 +11,5 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     StaffService staffService;
 
-    public List<Staff> getAll()
+//    public List<Staff> getAll()
 }

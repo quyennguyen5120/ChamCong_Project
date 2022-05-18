@@ -29,5 +29,4 @@ public class StaffEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "staff", cascade=CascadeType.REMOVE)
     private Set<Timekeeping> timekeeping;
-
 }

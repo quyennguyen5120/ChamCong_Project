@@ -11,5 +11,5 @@ import java.util.Date;
 @Repository
 public interface TimeKeepingRepository extends JpaRepository<Timekeeping, Long> {
     @Query("select t from Timekeeping  t where t.timeStart BETWEEN ?1 and ?2 and t.staff.id = ?3")
-    public Timekeeping findTimeKeepingByDay(String startDate, String endDate, Long staffId);
+    public Timekeeping findTimeKeepingByDay(Date startDate, Date endDate, Long staffId);
 }

@@ -40,7 +40,7 @@ deploy:
     - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker pull $TAG_COMMIT$JAR"
     - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker container rm -f spring-boot-app || true"
-    - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker run -d -p 8080:8080 --name spring-boot-app --network="host" $TAG_COMMIT$JAR"
+    - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker run -d -p 9995:9995 --name spring-boot-app --network="host" $TAG_COMMIT$JAR"
     - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker pull $TAG_COMMIT$NGINX"
     - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker container rm -f nginx-app || true"
     - ssh -i $GITLAB_CI_SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker run -d -p 80:80 --network="host" --name nginx-app $TAG_COMMIT$NGINX"

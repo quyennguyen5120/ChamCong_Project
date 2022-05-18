@@ -9,5 +9,4 @@ public interface StaffService {
     StaffDTO findById(Long id);
     boolean deleteById(Long id);
     StaffDTO saveOrUpdate(StaffDTO staffDTO);
-
 }

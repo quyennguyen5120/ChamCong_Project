@@ -38,13 +38,18 @@ public class StaffServiceImpl implements StaffService {
         return  staffRepository.getAll();
     }
 
+
     public StaffDTO findById(Long id){
-        StaffEntity staff = new StaffEntity();
-        staff = staffRepository.findById(id).get();
+        StaffEntity staff = null;
+        staff = staffRepository.getById(id);
         if(staff == null){
             return null;
         }
-        StaffDTO staffDTO = new StaffDTO(staff);
+        StaffDTO staffDTO = new StaffDTO();
+        staffDTO.setEmail(staff.getEmail());
+        staffDTO.setAddress(staff.getAddress());
+        staffDTO.setFullname(staff.getFullname());
+        staffDTO.setAge(staff.getAge());
         TimekeepingDTO timekeepingDTO = timeKeepingService.getByStaff(staff.getId());
         staffDTO.setTimekeepingConvert(timekeepingDTO);
         return staffDTO;

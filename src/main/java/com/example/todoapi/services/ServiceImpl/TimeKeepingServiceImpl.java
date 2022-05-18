@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -138,5 +139,18 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
             q.setParameter("endStart",date);
         }
         return q.getResultList();
+    }
+
+    @Override
+    public TimekeepingDTO getByStaff(Long staffId) {
+        List<TimekeepingDTO> timekeepingDTOS = timeKeepingRepository.findByStaffId(staffId);
+        TimekeepingDTO timekeepingDTO = new TimekeepingDTO();
+        List<Integer> integers = new ArrayList<>();
+        timekeepingDTOS.forEach(x->{
+            Integer day = x.getTimeStart().getDay();
+            integers.add(day);
+        });
+        timekeepingDTO.setDays(integers);
+        return timekeepingDTO;
     }
 }

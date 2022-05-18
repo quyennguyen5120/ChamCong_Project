@@ -42,4 +42,10 @@ public class RestTimeKeepingController {
     public ResponseEntity<?> enableTimeKeeping(@RequestBody TimeKeepingInputDto timeKeepingInputDto){
         return ResponseEntity.ok(timeKeepingService.findByEnabled(timeKeepingInputDto));
     }
+
+    //    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    @RequestMapping(value = "/getByStaff/{staffId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getByStaff(@PathVariable("staffId")Long staffId){
+        return ResponseEntity.ok(timeKeepingService.getByStaff(staffId));
+    }
 }

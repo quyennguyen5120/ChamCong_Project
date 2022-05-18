@@ -34,10 +34,21 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
 
     @Override
     public TimekeepingDTO requestTimeKeeping(Long staffId) {
+        String bacz= LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        Date dtz = new Date(bacz);
+        Date dt = new Date(bacz);
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+        Timekeeping timekeepingz = timeKeepingRepository.findTimeKeepingByDay(dtz, dt , staffId);
+        if(timekeepingz != null){
+            return null;
+        }
         Timekeeping timekeeping = new Timekeeping();
         timekeeping.setTimeStart(new Date());
         StaffEntity staff = staffRepository.getById(staffId);
-
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY,8);
@@ -57,12 +68,28 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
 
     @Override
     public TimekeepingDTO logoutTimeKeeping(Long staffId) {
-        String oldstring = new Date().toString();
-        LocalDateTime startDate = LocalDateTime.parse(oldstring, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalDateTime endDate = LocalDateTime.parse(oldstring, DateTimeFormatter.ofPattern("yyyy-MM-dd")).plusDays(1);
-        Timekeeping timekeeping = timeKeepingRepository.findTimeKeepingByDay(startDate.toString(), endDate.toString() , staffId);
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY,17);
+        cal.set(Calendar.MINUTE,30);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
+        Date d = cal.getTime();
+        String bacz= LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        Date dtz = new Date(bacz);
+        Date dt = new Date(bacz);
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+        Timekeeping timekeeping = timeKeepingRepository.findTimeKeepingByDay(dtz, dt , staffId);
         if(timekeeping != null){
-            timekeeping.setEndStart(new Date());
+            timekeeping.setEndStart(now);
+            if(d.getTime() > now.getTime()){
+                Long minutis = (d.getTime() - now.getTime()) / 1000 / 60;
+                timekeeping.setVesom(minutis);
+            }
             timekeeping = timeKeepingRepository.save(timekeeping);
         }
         else{

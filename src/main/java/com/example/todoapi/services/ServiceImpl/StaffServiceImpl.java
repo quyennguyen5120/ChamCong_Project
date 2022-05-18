@@ -2,7 +2,11 @@ package com.example.todoapi.services.ServiceImpl;
 
 import com.example.todoapi.dtos.StaffDTO;
 import com.example.todoapi.dtos.TimekeepingDTO;
+import com.example.todoapi.entities.RoleEntity;
 import com.example.todoapi.entities.StaffEntity;
+import com.example.todoapi.entities.Timekeeping;
+import com.example.todoapi.entities.UserEntity;
+import com.example.todoapi.repositories.RoleRepository;
 import com.example.todoapi.repositories.StaffRepository;
 import com.example.todoapi.repositories.UserRepository;
 import com.example.todoapi.services.StaffService;
@@ -10,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -19,6 +27,9 @@ public class StaffServiceImpl implements StaffService {
     StaffRepository staffRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    RoleRepository roleRepository;
+
 
     public List<StaffDTO> getAll(){
         return  staffRepository.getAll();
@@ -42,7 +53,7 @@ public class StaffServiceImpl implements StaffService {
         StaffEntity staffEntity = null;
 
         if (staffDTO.getId() != null){
-            staffEntity = staffRepository.findById(staffEntity.getId()).get();
+            staffEntity = staffRepository.findById(staffDTO.getId()).get();
         }else {
             staffEntity = new StaffEntity();
         }
@@ -55,14 +66,25 @@ public class StaffServiceImpl implements StaffService {
 
         if (staffDTO.getUserDTO().getId() != null){
             staffEntity.setUserEntity(userRepository.findById(staffDTO.getUserDTO().getId()).get());
-        }
+        }else {
+            UserEntity userEntity = new UserEntity();
+            userEntity.setEmail(staffDTO.getUserDTO().getEmail());
+            userEntity.setPassword(staffDTO.getUserDTO().getPassword());
+            userEntity.setUsername(staffDTO.getUserDTO().getUsername());
+            Set<RoleEntity> list = new HashSet<>();
 
+            list.add(roleRepository.findById(3).get());
+            userEntity.setRoles(list);
+            staffEntity.setUserEntity(userEntity);
+        }
 
         if (staffDTO.getUserParentDTO().getId() != null){
             staffEntity.setSubUserEntity(userRepository.findById(staffDTO.getUserParentDTO().getId()).get());
+        }else {
+            System.out.println("ko co UserParentDTO");
         }
-
+        staffEntity.setTimekeeping(null);
+        staffRepository.save(staffEntity);
         return new StaffDTO(staffEntity);
     }
-
 }

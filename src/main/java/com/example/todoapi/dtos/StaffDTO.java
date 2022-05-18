@@ -32,8 +32,9 @@ public class StaffDTO {
         this.address = staffEntity.getAddress();
         this.email = staffEntity.getEmail();
         this.age = staffEntity.getAge();
-        this.timekeeping = staffEntity.getTimekeeping().stream().map(x -> new TimekeepingDTO(x)).collect(Collectors.toSet());
-
+        if (staffEntity.getTimekeeping() != null){
+            this.timekeeping = staffEntity.getTimekeeping().stream().map(x -> new TimekeepingDTO(x)).collect(Collectors.toSet());
+        }
         UserDTO user= new UserDTO();
         user.setId(staffEntity.getUserEntity().getId());
         user.setUsername(staffEntity.getUserEntity().getUsername());

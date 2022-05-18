@@ -73,16 +73,16 @@ public class HomeController {
                 .orElseThrow(null);
     }
 
-//    @GetMapping("/add")
-//    public String addUser(){
-//        RoleEntity roleUser = roleRepository.findByName("ROLE_USER");
-//        UserEntity user = new UserEntity();
-//        user.setUsername("user");
-//        user.setPassword(passwordEncoder.encode("123"));
-//        user.setRoles(Set.of(roleUser));
-//        userRepository.save(user);
-//        return "";
-//    }
+    @GetMapping("/add")
+    public String addUser(){
+        RoleEntity roleUser = roleRepository.findByName("ROLE_USER");
+        UserEntity user = new UserEntity();
+        user.setUsername("user");
+        user.setPassword("123");
+        user.setRoles(Set.of(roleUser));
+        userRepository.save(user);
+        return "";
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest){

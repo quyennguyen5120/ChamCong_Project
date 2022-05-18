@@ -1,7 +1,9 @@
 package com.example.todoapi.dtos;
 
+import com.example.todoapi.entities.RoleEntity;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 

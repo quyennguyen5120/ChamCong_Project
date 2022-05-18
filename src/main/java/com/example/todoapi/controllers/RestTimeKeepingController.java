@@ -48,4 +48,13 @@ public class RestTimeKeepingController {
     public ResponseEntity<?> getByStaff(@PathVariable("staffId")Long staffId){
         return ResponseEntity.ok(timeKeepingService.getByStaff(staffId));
     }
+
+    @RequestMapping(value = "/lamthem/{staffId}/{sogio}", method = RequestMethod.GET)
+    public ResponseEntity<?> getByStaff(@PathVariable("staffId")Long staffId, @PathVariable("sogio")Long sogio){
+        return ResponseEntity.ok(timeKeepingService.lamthem(staffId,sogio));
+    }
+    @RequestMapping(value = "/xinvesom/{staffId}", method = RequestMethod.GET)
+    public ResponseEntity<?> xinvesom(@PathVariable("staffId")Long staffId){
+        return ResponseEntity.ok(timeKeepingService.xinvesom(staffId));
+    }
 }

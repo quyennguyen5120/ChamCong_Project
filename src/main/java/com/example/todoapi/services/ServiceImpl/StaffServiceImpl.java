@@ -36,6 +36,7 @@ public class StaffServiceImpl implements StaffService {
     TimeKeepingService timeKeepingService;
     @Autowired
     TimeKeepingRepository timeKeepingRepository;
+    @Autowired
 
 
     public List<StaffDTO> getAll(){

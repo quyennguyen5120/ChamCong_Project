@@ -23,6 +23,7 @@ public class StaffDTO {
     private String address;
     private UserDTO userDTO;
     private UserDTO userParentDTO;
+    private SalaryDto salaryDto;
     private Set<TimekeepingDTO> timekeeping;
     private TimekeepingDTO timekeepingConvert;
 
@@ -52,6 +53,12 @@ public class StaffDTO {
             userParent.setEmail(staffEntity.getUserEntity().getEmail());
             userParent.setPassword(staffEntity.getUserEntity().getPassword());
             this.userParentDTO = userParent;
+        }
+        if(staffEntity.getSalaryEntity() != null){
+            SalaryDto salary = new SalaryDto();
+            salary.setSalary(staffEntity.getSalaryEntity().getSalary());
+            salary.setId(staffEntity.getSalaryEntity().getId());
+            this.salaryDto = salary;
         }
     }
 

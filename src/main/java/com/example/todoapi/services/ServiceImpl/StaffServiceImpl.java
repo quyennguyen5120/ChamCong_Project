@@ -3,10 +3,7 @@ package com.example.todoapi.services.ServiceImpl;
 import com.example.todoapi.dtos.StaffDTO;
 import com.example.todoapi.dtos.TimekeepingDTO;
 import com.example.todoapi.dtos.UserDTO;
-import com.example.todoapi.entities.RoleEntity;
-import com.example.todoapi.entities.StaffEntity;
-import com.example.todoapi.entities.Timekeeping;
-import com.example.todoapi.entities.UserEntity;
+import com.example.todoapi.entities.*;
 import com.example.todoapi.repositories.RoleRepository;
 import com.example.todoapi.repositories.StaffRepository;
 import com.example.todoapi.repositories.TimeKeepingRepository;
@@ -14,6 +11,7 @@ import com.example.todoapi.repositories.UserRepository;
 import com.example.todoapi.services.StaffService;
 import com.example.todoapi.services.TimeKeepingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +33,11 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     TimeKeepingService timeKeepingService;
     @Autowired
+<<<<<<< HEAD
+    PasswordEncoder passwordEncoder;
+=======
     TimeKeepingRepository timeKeepingRepository;
+>>>>>>> 798dbee8c698f7287fa713ffef78f82fd9b96e6a
 
 
     public List<StaffDTO> getAll(){
@@ -96,7 +98,7 @@ public class StaffServiceImpl implements StaffService {
         }else {
             UserEntity userEntity = new UserEntity();
             userEntity.setEmail(staffDTO.getUserDTO().getEmail());
-            userEntity.setPassword(staffDTO.getUserDTO().getPassword());
+            userEntity.setPassword(passwordEncoder.encode(staffDTO.getUserDTO().getPassword()));
             userEntity.setUsername(staffDTO.getUserDTO().getUsername());
             userEntity.setRoles(Set.of(roleRepository.findByName("ROLE_USER")));
             userRepository.save(userEntity);
@@ -108,8 +110,23 @@ public class StaffServiceImpl implements StaffService {
         }else {
             System.out.println("ko co UserParentDTO");
         }
+<<<<<<< HEAD
+        staffEntity.setTimekeeping(null);
+
+        if (staffDTO.getSalaryDto() != null){
+            SalaryEntity salaryEntity = new SalaryEntity();
+            salaryEntity.setSalary(staffDTO.getSalaryDto().getSalary());
+            salaryEntity.setId(staffDTO.getSalaryDto().getId());
+        }
+        if(staffEntity.getUserEntity().getUsername() != null || userRepository.findByUsername(staffEntity.getUserEntity().getUsername())== null){
+            staffRepository.save(staffEntity);
+        }else {
+            staffEntity = null;
+        }
+=======
 //        staffEntity.setTimekeeping(null);
         staffRepository.save(staffEntity);
+>>>>>>> 798dbee8c698f7287fa713ffef78f82fd9b96e6a
         return new StaffDTO(staffEntity);
     }
 

@@ -34,9 +34,6 @@ public class StaffDTO {
         this.address = staffEntity.getAddress();
         this.email = staffEntity.getEmail();
         this.age = staffEntity.getAge();
-        if (staffEntity.getTimekeeping() != null){
-            this.timekeeping = staffEntity.getTimekeeping().stream().map(x -> new TimekeepingDTO(x)).collect(Collectors.toSet());
-        }
 
         if (staffEntity.getUserEntity() != null){
             UserDTO user= new UserDTO();
@@ -61,5 +58,6 @@ public class StaffDTO {
             this.salaryDto = salary;
         }
     }
+
 
 }

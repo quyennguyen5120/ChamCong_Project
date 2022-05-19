@@ -15,7 +15,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -147,11 +149,24 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
         TimekeepingDTO timekeepingDTO = new TimekeepingDTO();
         List<Integer> integers = new ArrayList<>();
         timekeepingDTOS.forEach(x->{
-            Integer day = x.getTimeStart().getDay();
-            integers.add(day);
+            Date input = x.getTimeStart();
+            LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            integers.add(date.getDayOfMonth());
         });
         timekeepingDTO.setDays(integers);
         return timekeepingDTO;
+    }
+
+    @Override
+    public List<TimekeepingDTO> getByAllStaff() {
+        List<StaffEntity> staffEntities = staffRepository.findAll();
+        List<TimekeepingDTO> timekeepingDTOS = new ArrayList<>();
+        staffEntities.forEach(x->{
+            TimekeepingDTO timekeepingDTO = this.getByStaff(x.getId());
+            timekeepingDTO.setDescription(x.getFullname());
+            timekeepingDTOS.add(timekeepingDTO);
+        });
+        return timekeepingDTOS;
     }
 
     @Override

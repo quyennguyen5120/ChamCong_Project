@@ -86,7 +86,14 @@ public class HomeController {
         user.setUsername("userz");
         user.setPassword(passwordEncoder.encode("123"));
         user.setRoles(Set.of(roleUser));
-        userRepository.save(user);
+        user = userRepository.save(user);
+        StaffEntity staff = new StaffEntity();
+        staff.setFullname("Nguyen Huu Quyen");
+        staff.setAddress("Bac Giang");
+        staff.setAge(20);
+        staff.setEmail("quyenproxxxx@gmail.com");
+        staff.setUserEntity(user);
+        staffRepository.save(staff);
         return "";
     }
 

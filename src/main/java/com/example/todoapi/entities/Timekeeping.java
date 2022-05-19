@@ -44,7 +44,7 @@ public class Timekeeping extends BaseEntity{
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private StaffEntity staff;
 
 }

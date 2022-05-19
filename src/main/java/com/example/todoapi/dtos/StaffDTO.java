@@ -24,6 +24,7 @@ public class StaffDTO {
     private SalaryDto salaryDto;
     private UserDTO userDTO;
     private UserDTO userParentDTO;
+    private SalaryDto salaryDto;
     private Set<TimekeepingDTO> timekeeping;
     private TimekeepingDTO timekeepingConvert;
 
@@ -33,7 +34,7 @@ public class StaffDTO {
         this.fullname = staffEntity.getFullname();
         this.address = staffEntity.getAddress();
         this.email = staffEntity.getEmail();
-        this.age = staffEntity.getAge();
+        this.age = staffEntity.getAge();-
 
         if (staffEntity.getSalaryEntity() != null){
             SalaryDto salaryDto = new SalaryDto(staffEntity.getSalaryEntity());
@@ -59,6 +60,13 @@ public class StaffDTO {
             userParent.setPassword(staffEntity.getUserEntity().getPassword());
             this.userParentDTO = userParent;
         }
+        if(staffEntity.getSalaryEntity() != null){
+            SalaryDto salary = new SalaryDto();
+            salary.setSalary(staffEntity.getSalaryEntity().getSalary());
+            salary.setId(staffEntity.getSalaryEntity().getId());
+            this.salaryDto = salary;
+        }
     }
+
 
 }

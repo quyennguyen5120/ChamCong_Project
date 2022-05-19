@@ -2,6 +2,7 @@ package com.example.todoapi.services.ServiceImpl;
 
 import com.example.todoapi.dtos.StaffDTO;
 import com.example.todoapi.dtos.TimekeepingDTO;
+import com.example.todoapi.dtos.UserDTO;
 import com.example.todoapi.entities.RoleEntity;
 import com.example.todoapi.entities.StaffEntity;
 import com.example.todoapi.entities.Timekeeping;
@@ -110,5 +111,10 @@ public class StaffServiceImpl implements StaffService {
 //        staffEntity.setTimekeeping(null);
         staffRepository.save(staffEntity);
         return new StaffDTO(staffEntity);
+    }
+
+    @Override
+    public List<UserDTO> findAllByIdRole(int id) {
+        return userRepository.findUserEntitiesByRoleName(id);
     }
 }

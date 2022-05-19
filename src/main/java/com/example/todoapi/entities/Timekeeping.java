@@ -41,6 +41,9 @@ public class Timekeeping extends BaseEntity{
     @Column(name = "xin_ve_som")
     private Boolean xinVeSom;
 
+    @Column(name = "xin_lam_them")
+    private Boolean xinLamThem;
+
     @Column(name = "is_active")
     private Boolean isActive;
 

@@ -25,7 +25,7 @@ public class RestStaffController {
     public ResponseEntity<?> saveStaff(@RequestBody StaffDTO staffDTO){
         return ResponseEntity.ok(staffService.saveOrUpdate(staffDTO));
     }
-    @PatchMapping
+    @PostMapping(value = "/update")
     public ResponseEntity<?> updateStaff(@RequestBody StaffDTO staffDTO){
         return ResponseEntity.ok(staffService.saveOrUpdate(staffDTO));
     }
@@ -42,4 +42,6 @@ public class RestStaffController {
     public ResponseEntity<?> getAllUserByRoles(@PathVariable("id") int id){
         return ResponseEntity.ok(staffService.findAllByIdRole(id));
     }
+
+
 }

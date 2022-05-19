@@ -14,8 +14,8 @@ public class RestSalaryController {
     @Autowired
     SalaryService salaryService;
     @GetMapping("/{staffId}")
-    public ResponseEntity<?> calculateSalary(@PathVariable Long staffId){
-        return ResponseEntity.ok().body(salaryService);
+    public ResponseEntity<?> calculateSalary(@PathVariable Long staffId, @RequestParam("month") int month){
+        return ResponseEntity.ok().body(salaryService.calculateSalary(staffId, month));
     }
     @PostMapping
     public ResponseEntity<?> saveStaff(@RequestBody SalaryDto salaryDto){

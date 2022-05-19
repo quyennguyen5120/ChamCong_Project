@@ -21,8 +21,10 @@ public class StaffDTO {
     private String email;
     private Integer age;
     private String address;
+    private SalaryDto salaryDto;
     private UserDTO userDTO;
     private UserDTO userParentDTO;
+    private SalaryDto salaryDto;
     private Set<TimekeepingDTO> timekeeping;
     private TimekeepingDTO timekeepingConvert;
 
@@ -32,7 +34,15 @@ public class StaffDTO {
         this.fullname = staffEntity.getFullname();
         this.address = staffEntity.getAddress();
         this.email = staffEntity.getEmail();
-        this.age = staffEntity.getAge();
+        this.age = staffEntity.getAge();-
+
+        if (staffEntity.getSalaryEntity() != null){
+            SalaryDto salaryDto = new SalaryDto(staffEntity.getSalaryEntity());
+        }
+
+        if (staffEntity.getTimekeeping() != null){
+            this.timekeeping = staffEntity.getTimekeeping().stream().map(x -> new TimekeepingDTO(x)).collect(Collectors.toSet());
+        }
 
         if (staffEntity.getUserEntity() != null){
             UserDTO user= new UserDTO();
@@ -49,6 +59,12 @@ public class StaffDTO {
             userParent.setEmail(staffEntity.getUserEntity().getEmail());
             userParent.setPassword(staffEntity.getUserEntity().getPassword());
             this.userParentDTO = userParent;
+        }
+        if(staffEntity.getSalaryEntity() != null){
+            SalaryDto salary = new SalaryDto();
+            salary.setSalary(staffEntity.getSalaryEntity().getSalary());
+            salary.setId(staffEntity.getSalaryEntity().getId());
+            this.salaryDto = salary;
         }
     }
 

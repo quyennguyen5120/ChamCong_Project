@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -57,8 +55,11 @@ public class SalaryServiceImpl implements SalaryService {
         return new SalaryDto(salaryEntity);
     }
 
-    public List<Double> calculateSalary(Long staffId){
+    public List<Double> calculateSalary(Long staffId, int month){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        YearMonth yearMonth = YearMonth.of(YearMonth.now().getYear(), month);
+        LocalDate firstOfMonth = yearMonth.atDay(1);
+        LocalDate lastOfMonth = yearMonth.atEndOfMonth();
         List<TimekeepingDTO> timekeepingDTO = timeKeepingRepository.findByStaffId(staffId);
         List<Double> listHeSoCong = new ArrayList<>();
         for (TimekeepingDTO t: timekeepingDTO){

@@ -16,4 +16,6 @@ public interface TimeKeepingRepository extends JpaRepository<Timekeeping, Long> 
 
     @Query("select new com.example.todoapi.dtos.TimekeepingDTO(t) from Timekeeping t where t.staff.id = ?1")
     public List<TimekeepingDTO> findByStaffId(Long staffId);
+
+
 }

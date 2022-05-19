@@ -33,11 +33,10 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     TimeKeepingService timeKeepingService;
     @Autowired
-<<<<<<< HEAD
     PasswordEncoder passwordEncoder;
-=======
+    @Autowired
     TimeKeepingRepository timeKeepingRepository;
->>>>>>> 798dbee8c698f7287fa713ffef78f82fd9b96e6a
+
 
 
     public List<StaffDTO> getAll(){
@@ -110,7 +109,7 @@ public class StaffServiceImpl implements StaffService {
         }else {
             System.out.println("ko co UserParentDTO");
         }
-<<<<<<< HEAD
+
         staffEntity.setTimekeeping(null);
 
         if (staffDTO.getSalaryDto() != null){
@@ -123,10 +122,8 @@ public class StaffServiceImpl implements StaffService {
         }else {
             staffEntity = null;
         }
-=======
 //        staffEntity.setTimekeeping(null);
         staffRepository.save(staffEntity);
->>>>>>> 798dbee8c698f7287fa713ffef78f82fd9b96e6a
         return new StaffDTO(staffEntity);
     }
 

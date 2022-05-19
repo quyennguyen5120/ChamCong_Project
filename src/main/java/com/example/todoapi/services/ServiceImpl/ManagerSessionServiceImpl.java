@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Transactional
 @Service
@@ -30,10 +31,6 @@ public class ManagerSessionServiceImpl implements ManagerSessionService {
     @Override
     public Boolean request_vesom(Long staffId) {
         try{
-            ManagerSession managerSession = new ManagerSession();
-            StaffEntity staff = staffRepository.getById(staffId);
-            managerSession.setStaffEntity(staff);
-            managerSession.setIsVeSom(false);
             String bacz= LocalDateTime.now()
                     .format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
             Date dtz = new Date(bacz);
@@ -42,6 +39,54 @@ public class ManagerSessionServiceImpl implements ManagerSessionService {
             c.setTime(dt);
             c.add(Calendar.DATE, 1);
             dt = c.getTime();
+
+            ManagerSession managerSession = null;
+            managerSession = managerSessionRepositoryl.findSessionByDayVeSom(dtz, dt , staffId);
+            if(managerSession != null){
+                return null;
+            }
+            else {
+                managerSession = new ManagerSession();
+            }
+            StaffEntity staff = staffRepository.getById(staffId);
+            managerSession.setStaffEntity(staff);
+            managerSession.setIsVeSom(false);
+
+            Timekeeping timekeepingz = timeKeepingRepository.findTimeKeepingByDay(dtz, dt , staffId);
+            managerSession.setTimekeeping(timekeepingz);
+            managerSessionRepositoryl.save(managerSession);
+            return true;
+        }
+        catch (Exception e){
+            return  false;
+        }
+    }
+
+    @Override
+    public Boolean request_lamthem(Long staffId, Long sogio) {
+        try{
+            String bacz= LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+            Date dtz = new Date(bacz);
+            Date dt = new Date(bacz);
+            Calendar c = Calendar.getInstance();
+            c.setTime(dt);
+            c.add(Calendar.DATE, 1);
+            dt = c.getTime();
+
+            ManagerSession managerSession = null;
+            managerSession = managerSessionRepositoryl.findSessionByDayLamThem(dtz, dt , staffId);
+            if(managerSession != null){
+                return null;
+            }
+            else {
+                managerSession = new ManagerSession();
+            }
+            StaffEntity staff = staffRepository.getById(staffId);
+            managerSession.setStaffEntity(staff);
+            managerSession.setIsLamThem(false);
+            managerSession.setTimeLamThem(sogio);
+
             Timekeeping timekeepingz = timeKeepingRepository.findTimeKeepingByDay(dtz, dt , staffId);
             managerSession.setTimekeeping(timekeepingz);
 
@@ -54,29 +99,45 @@ public class ManagerSessionServiceImpl implements ManagerSessionService {
     }
 
     @Override
-    public Boolean request_lamthem(Long staffId, Long sogio) {
-        try{
-            ManagerSession managerSession = new ManagerSession();
-            StaffEntity staff = staffRepository.getById(staffId);
-            managerSession.setStaffEntity(staff);
-            managerSession.setIsLamThem(false);
-            managerSession.setTimeLamThem(sogio);
-            String bacz= LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-            Date dtz = new Date(bacz);
-            Date dt = new Date(bacz);
-            Calendar c = Calendar.getInstance();
-            c.setTime(dt);
-            c.add(Calendar.DATE, 1);
-            dt = c.getTime();
-            Timekeeping timekeepingz = timeKeepingRepository.findTimeKeepingByDay(dtz, dt , staffId);
-            managerSession.setTimekeeping(timekeepingz);
+    public List<ManagerSessionDto> getAllVeSom() {
+        return managerSessionRepositoryl.getAllXinVeSom();
+    }
 
-            managerSessionRepositoryl.save(managerSession);
+    @Override
+    public List<ManagerSessionDto> getAllLamThem() {
+        return managerSessionRepositoryl.getAllLamThem();
+    }
+
+    @Override
+    public Boolean accept_vesom(Long staffId, Long time) {
+       try{
+           ManagerSession managerSession = managerSessionRepositoryl.acceptVeSom(staffId,time);
+           managerSession.setIsVeSom(true);
+           managerSession = managerSessionRepositoryl.save(managerSession);
+           Timekeeping timekeeping = managerSession.getTimekeeping();
+           timekeeping.setXinVeSom(true);
+           timeKeepingRepository.save(timekeeping);
+           return true;
+       }
+       catch (Exception e){
+           return false;
+       }
+    }
+
+    @Override
+    public Boolean accept_lamthem(Long staffId, Long time) {
+        try{
+            ManagerSession managerSession = managerSessionRepositoryl.acceptLamThem(staffId,time);
+            managerSession.setIsLamThem(true);
+            managerSession =managerSessionRepositoryl.save(managerSession);
+            Timekeeping timekeeping = managerSession.getTimekeeping();
+            timekeeping.setXinLamThem(true);
+            timekeeping.setLamthem(time);
+            timeKeepingRepository.save(timekeeping);
             return true;
         }
         catch (Exception e){
-            return  false;
+            return false;
         }
     }
 

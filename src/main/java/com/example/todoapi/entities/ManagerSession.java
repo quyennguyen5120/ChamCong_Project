@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Builder
-public class ManagerSession {
+public class ManagerSession extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

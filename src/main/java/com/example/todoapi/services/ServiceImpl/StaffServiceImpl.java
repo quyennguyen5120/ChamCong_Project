@@ -9,6 +9,7 @@ import com.example.todoapi.entities.Timekeeping;
 import com.example.todoapi.entities.UserEntity;
 import com.example.todoapi.repositories.RoleRepository;
 import com.example.todoapi.repositories.StaffRepository;
+import com.example.todoapi.repositories.TimeKeepingRepository;
 import com.example.todoapi.repositories.UserRepository;
 import com.example.todoapi.services.StaffService;
 import com.example.todoapi.services.TimeKeepingService;
@@ -33,10 +34,19 @@ public class StaffServiceImpl implements StaffService {
     RoleRepository roleRepository;
     @Autowired
     TimeKeepingService timeKeepingService;
+    @Autowired
+    TimeKeepingRepository timeKeepingRepository;
 
 
     public List<StaffDTO> getAll(){
-        return  staffRepository.getAll();
+        List<StaffDTO> staffDTOS =  staffRepository.getAll();
+        staffDTOS.forEach(x->{
+            List<TimekeepingDTO> timekeepingDTOS = timeKeepingRepository.findByStaffId(x.getId());
+            Set<TimekeepingDTO> foo = new HashSet<TimekeepingDTO>(timekeepingDTOS);
+            x.setTimekeeping(foo);
+        });
+
+        return staffDTOS;
     }
 
 
@@ -98,7 +108,7 @@ public class StaffServiceImpl implements StaffService {
         }else {
             System.out.println("ko co UserParentDTO");
         }
-        staffEntity.setTimekeeping(null);
+//        staffEntity.setTimekeeping(null);
         staffRepository.save(staffEntity);
         return new StaffDTO(staffEntity);
     }

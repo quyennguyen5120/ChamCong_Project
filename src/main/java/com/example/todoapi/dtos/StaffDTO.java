@@ -33,9 +33,24 @@ public class StaffDTO {
         this.address = staffEntity.getAddress();
         this.email = staffEntity.getEmail();
         this.age = staffEntity.getAge();
-        if (staffEntity.getTimekeeping() != null){
-            this.timekeeping = staffEntity.getTimekeeping().stream().map(x -> new TimekeepingDTO(x)).collect(Collectors.toSet());
-        }
+
+//        if (staffEntity.getTimekeeping() != null){
+//            this.timekeeping = staffEntity.getTimekeeping().stream().map(x -> new TimekeepingDTO(x)).collect(Collectors.toSet());
+//        }
+        UserDTO user= new UserDTO();
+        user.setId(staffEntity.getUserEntity().getId());
+        user.setUsername(staffEntity.getUserEntity().getUsername());
+        user.setEmail(staffEntity.getUserEntity().getEmail());
+        user.setPassword(staffEntity.getUserEntity().getPassword());
+        this.userDTO = user;
+
+        UserDTO userParent= new UserDTO();
+        userParent.setId(staffEntity.getUserEntity().getId());
+        userParent.setUsername(staffEntity.getUserEntity().getUsername());
+        userParent.setEmail(staffEntity.getUserEntity().getEmail());
+        userParent.setPassword(staffEntity.getUserEntity().getPassword());
+        this.userParentDTO = userParent;
+
 
         if (staffEntity.getUserEntity() != null){
             UserDTO user= new UserDTO();
@@ -54,5 +69,6 @@ public class StaffDTO {
             this.userParentDTO = userParent;
         }
     }
+
 
 }

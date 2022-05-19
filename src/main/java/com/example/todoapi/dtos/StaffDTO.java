@@ -21,6 +21,7 @@ public class StaffDTO {
     private String email;
     private Integer age;
     private String address;
+    private SalaryDto salaryDto;
     private UserDTO userDTO;
     private UserDTO userParentDTO;
     private Set<TimekeepingDTO> timekeeping;
@@ -33,6 +34,11 @@ public class StaffDTO {
         this.address = staffEntity.getAddress();
         this.email = staffEntity.getEmail();
         this.age = staffEntity.getAge();
+
+        if (staffEntity.getSalaryEntity() != null){
+            SalaryDto salaryDto = new SalaryDto(staffEntity.getSalaryEntity());
+        }
+
         if (staffEntity.getTimekeeping() != null){
             this.timekeeping = staffEntity.getTimekeeping().stream().map(x -> new TimekeepingDTO(x)).collect(Collectors.toSet());
         }

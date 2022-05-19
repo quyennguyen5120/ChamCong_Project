@@ -22,6 +22,11 @@ public class TimekeepingDTO {
     private Long id;
     private Date timeStart;
     private Date endStart;
+    private Long lamthem;
+    private Long dimuon;
+    private Long vesom;
+    private Long lamviec;
+    private Boolean xinVeSom;
     private Boolean is_Active;
     private StaffDTO staffDTO;
     private String description;
@@ -32,6 +37,11 @@ public class TimekeepingDTO {
         this.id = timekeeping.getId();
         this.timeStart = timekeeping.getTimeStart();
         this.endStart = timekeeping.getEndStart();
+        this.lamthem = timekeeping.getLamthem();
+        this.dimuon = timekeeping.getDimuon();
+        this.vesom = timekeeping.getVesom();
+        this.lamthem = timekeeping.getLamthem();
+        this.xinVeSom = timekeeping.getXinVeSom();
         this.is_Active = timekeeping.getIsActive();
         StaffDTO s = new StaffDTO();
         s.setAddress(timekeeping.getStaff().getAddress());

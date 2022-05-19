@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -17,5 +18,5 @@ public interface TimeKeepingRepository extends JpaRepository<Timekeeping, Long> 
     @Query("select new com.example.todoapi.dtos.TimekeepingDTO(t) from Timekeeping t where t.staff.id = ?1")
     public List<TimekeepingDTO> findByStaffId(Long staffId);
 
-    public List<Timekeeping> findAllByTimeStartBetween();
+    public List<Timekeeping> findAllByTimeStartBetween(String startDate, String endDate);
 }

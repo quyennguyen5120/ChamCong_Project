@@ -11,10 +11,17 @@ import com.example.todoapi.repositories.SalaryRepository;
 import com.example.todoapi.repositories.StaffRepository;
 import com.example.todoapi.repositories.TimeKeepingRepository;
 import com.example.todoapi.services.SalaryService;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -105,5 +112,129 @@ public class SalaryServiceImpl implements SalaryService {
         double luong = heSoLuong * staffEntity.getSalaryEntity().getSalary();
         StaffDTO staffDTO = new StaffDTO(staffEntity);
         return new StaffSalaryDTO(staffDTO, heSoLuong, luong);
+    }
+    @Override
+    public Workbook exportBySearchDto(HttpServletResponse response) {
+        HSSFWorkbook workbook = null;
+        try {
+            workbook = new HSSFWorkbook();
+            CreationHelper createHelper = workbook.getCreationHelper();
+            Sheet sheet = workbook.createSheet("Report");
+            sheet.addMergedRegion(new CellRangeAddress(0, 0 , 0, 4));
+
+            List<StaffEntity> listStaffEntity = staffRepository.findAll();
+            List<StaffSalaryDTO> listStaffSalaryDTO = new ArrayList<>();
+
+            Date date = new Date();
+            int month = date.getMonth();
+
+            for (StaffEntity s : listStaffEntity){
+                listStaffSalaryDTO.add(calculateSalary(s.getId(),month));
+            }
+
+            HSSFFont font = workbook.createFont();
+            font.setFontHeightInPoints((short) 12);
+            font.setColor(HSSFFont.COLOR_NORMAL);
+            font.setBold(true);
+
+            HSSFCellStyle headerCellStyle = workbook.createCellStyle();
+            headerCellStyle.setFont(font);
+            headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            headerCellStyle.setWrapText(false);
+            headerCellStyle.setBorderBottom(BorderStyle.THIN);
+            headerCellStyle.setBorderLeft(BorderStyle.THIN);
+            headerCellStyle.setBorderRight(BorderStyle.THIN);
+            headerCellStyle.setBorderTop(BorderStyle.THIN);
+
+            HSSFFont fontcontent = workbook.createFont();
+            fontcontent.setFontHeightInPoints((short) 11);
+            fontcontent.setColor(HSSFFont.COLOR_NORMAL);
+
+            HSSFCellStyle contentCellStyle = workbook.createCellStyle();
+            contentCellStyle.setFont(fontcontent);
+            contentCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            contentCellStyle.setWrapText(false);
+            contentCellStyle.setBorderBottom(BorderStyle.THIN);
+            contentCellStyle.setBorderLeft(BorderStyle.THIN);
+            contentCellStyle.setBorderRight(BorderStyle.THIN);
+            contentCellStyle.setBorderTop(BorderStyle.THIN);
+
+            HSSFCellStyle contentCellStyleDate = workbook.createCellStyle();
+            contentCellStyleDate.setFont(fontcontent);
+            contentCellStyleDate.setAlignment(HorizontalAlignment.CENTER);
+            contentCellStyleDate.setWrapText(false);
+            contentCellStyleDate.setBorderBottom(BorderStyle.THIN);
+            contentCellStyleDate.setBorderLeft(BorderStyle.THIN);
+            contentCellStyleDate.setBorderRight(BorderStyle.THIN);
+            contentCellStyleDate.setBorderTop(BorderStyle.THIN);
+            contentCellStyleDate.setDataFormat(createHelper.createDataFormat().getFormat("dd/mm/yyyy"));
+
+            Integer rowIndex = 0;
+            Integer cellIndex = 0;
+            Row rowHeader = sheet.createRow(rowIndex);
+            Cell cellHeader = null;
+
+            rowHeader.setHeightInPoints(33);
+            cellHeader = rowHeader.createCell(cellIndex);
+            cellHeader.setCellValue("THỐNG KÊ Lương");
+            cellHeader.setCellStyle(headerCellStyle);
+
+            rowHeader = sheet.createRow(rowIndex +=1);
+            cellHeader = rowHeader.createCell(cellIndex);
+            cellHeader.setCellValue("STT");
+            cellHeader.setCellStyle(headerCellStyle);
+
+            cellHeader = rowHeader.createCell(cellIndex +=1);
+            cellHeader.setCellValue("Tên nhân viên ");
+            cellHeader.setCellStyle(headerCellStyle);
+
+            cellHeader = rowHeader.createCell(cellIndex += 1);
+            cellHeader.setCellValue("Hệ Số Lương ");
+            cellHeader.setCellStyle(headerCellStyle);
+
+            cellHeader = rowHeader.createCell(cellIndex += 1);
+            cellHeader.setCellValue("Lương ");
+            cellHeader.setCellStyle(headerCellStyle);
+
+            Integer numberOfItem = 0;
+            for (StaffSalaryDTO item : listStaffSalaryDTO) {
+                numberOfItem +=1;
+                rowIndex += 1;
+                cellIndex = 0;
+                rowHeader = sheet.createRow(rowIndex);
+                cellHeader = rowHeader.createCell(cellIndex);
+                cellHeader.setCellValue(numberOfItem);
+                cellHeader.setCellStyle(contentCellStyle);
+
+                cellHeader = rowHeader.createCell(cellIndex +=1);
+                cellHeader.setCellValue(item.getStaffDTO().getFullname());
+                cellHeader.setCellStyle(contentCellStyle);
+
+                cellHeader = rowHeader.createCell(cellIndex += 1);
+                cellHeader.setCellValue(item.getHeSoLuong());
+                cellHeader.setCellStyle(contentCellStyle);
+
+                cellHeader = rowHeader.createCell(cellIndex += 1);
+                cellHeader.setCellValue(item.getHeSoLuong());
+                cellHeader.setCellStyle(contentCellStyle);
+            }
+            sheet.setColumnWidth(0, 7500);
+            sheet.setColumnWidth(1, 7500);
+            sheet.setColumnWidth(2, 7500);
+            sheet.setColumnWidth(3, 7500);
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Expires", "0");
+            response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+            response.setHeader("Pragma", "public");
+            response.setHeader("Content-Disposition", "attachment; filename=ReportsData.xls");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return workbook;
     }
 }

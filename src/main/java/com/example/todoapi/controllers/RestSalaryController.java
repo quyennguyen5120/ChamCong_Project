@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class RestSalaryController {
     @Autowired
     SalaryService salaryService;
-    @GetMapping("/{staffId}")
+    @GetMapping("/staff/{staffId}")
     public ResponseEntity<?> calculateSalary(@PathVariable Long staffId, @RequestParam("month") int month){
         return ResponseEntity.ok().body(salaryService.calculateSalary(staffId, month));
     }

@@ -27,6 +27,7 @@ public class TimekeepingDTO {
     private Long vesom;
     private Long lamviec;
     private Boolean xinVeSom;
+    private Boolean xinLamThem;
     private Boolean is_Active;
     private StaffDTO staffDTO;
     private String description;

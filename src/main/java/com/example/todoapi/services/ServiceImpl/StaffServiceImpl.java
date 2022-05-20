@@ -110,8 +110,6 @@ public class StaffServiceImpl implements StaffService {
             System.out.println("ko co UserParentDTO");
         }
 
-        staffEntity.setTimekeeping(null);
-
         if (staffDTO.getSalaryDto() != null){
             SalaryEntity salaryEntity = new SalaryEntity();
             salaryEntity.setSalary(staffDTO.getSalaryDto().getSalary());

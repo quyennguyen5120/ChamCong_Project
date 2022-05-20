@@ -5,8 +5,10 @@ import com.example.todoapi.dtos.StaffDTO;
 import com.example.todoapi.dtos.StaffSalaryDTO;
 import com.example.todoapi.dtos.TimekeepingDTO;
 import com.example.todoapi.entities.SalaryEntity;
+import com.example.todoapi.entities.StaffEntity;
 import com.example.todoapi.entities.Timekeeping;
 import com.example.todoapi.repositories.SalaryRepository;
+import com.example.todoapi.repositories.StaffRepository;
 import com.example.todoapi.repositories.TimeKeepingRepository;
 import com.example.todoapi.services.SalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +29,8 @@ public class SalaryServiceImpl implements SalaryService {
     SalaryRepository salaryRepository;
     @Autowired
     TimeKeepingRepository timeKeepingRepository;
+    @Autowired
+    StaffRepository staffRepository;
 
     public List<SalaryDto> getAll(){
         return  salaryRepository.getAll();
@@ -58,10 +63,13 @@ public class SalaryServiceImpl implements SalaryService {
     }
 
     public StaffSalaryDTO calculateSalary(Long staffId, int month){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         YearMonth yearMonth = YearMonth.of(YearMonth.now().getYear(), month);
-        String firstOfMonth = yearMonth.atDay(1).format(dtf);
-        String lastOfMonth = yearMonth.atEndOfMonth().format(dtf);
+        LocalDate localDate1 = yearMonth.atDay(1);
+        LocalDate localDate2 = yearMonth.atEndOfMonth();
+        Date firstOfMonth = Date.from(localDate1.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date lastOfMonth = Date.from(localDate2.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
         List<Timekeeping> timekeepingList = timeKeepingRepository.findAllByTimeStartBetween(firstOfMonth, lastOfMonth);
         List<TimekeepingDTO> timekeepingDTOList = new ArrayList<>();
         timekeepingList.forEach(t -> {
@@ -69,26 +77,33 @@ public class SalaryServiceImpl implements SalaryService {
             timekeepingDTOList.add(timekeepingDTO);
         });
         double heSoLuong = 0;
-        StaffDTO staffDTO = new StaffDTO();
+        StaffEntity staffEntity = staffRepository.getById(staffId);
         for (TimekeepingDTO t: timekeepingDTOList){
             LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
             LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
-            double daysBetween = Duration.between(startTime, endTime).toMinutes();
-            daysBetween = daysBetween / 60 - 1;
+            double timesBetween = Duration.between(startTime, endTime).toMinutes();
+            timesBetween = timesBetween / 60 - 1;
 
-            if (daysBetween > 8)
-                daysBetween = 8;
+            if (timesBetween > 8)
+                timesBetween = 8;
             if (t.getDimuon() != null)
-                daysBetween += t.getDimuon() / 60;
-            if (t.getLamthem() != null)
-                daysBetween += t.getLamthem() / 60;
-            if (!t.getXinVeSom())
-                daysBetween -= t.getVesom() / 60;
+                timesBetween -= t.getDimuon().doubleValue() / 60;
+            if (t.getXinLamThem() != null){
+                if (t.getXinLamThem())
+                    timesBetween += t.getLamthem().doubleValue() / 60;
+            }
+            if (t.getXinVeSom() != null){
+                if (!t.getXinVeSom())
+                    timesBetween -= t.getVesom().doubleValue() / 60;
+            } else {
+                if (t.getVesom() != null)
+                    timesBetween -= t.getVesom().doubleValue() / 60;
+            }
 
-            heSoLuong += daysBetween / 8;
-            staffDTO = t.getStaffDTO();
+            heSoLuong += timesBetween / 8;
         }
-        double luong = heSoLuong * staffDTO.getSalaryDto().getSalary();
+        double luong = heSoLuong * staffEntity.getSalaryEntity().getSalary();
+        StaffDTO staffDTO = new StaffDTO(staffEntity);
         return new StaffSalaryDTO(staffDTO, heSoLuong, luong);
     }
 }

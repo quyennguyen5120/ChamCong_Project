@@ -84,10 +84,13 @@ public class SalaryServiceImpl implements SalaryService {
             timekeepingDTOList.add(timekeepingDTO);
         });
         double heSoLuong = 0;
-        StaffEntity staffEntity = staffRepository.getById(staffId);
+        StaffEntity staffEntity = staffRepository.findById(staffId).get();
         for (TimekeepingDTO t: timekeepingDTOList){
+            if(t.getEndStart() == null)//####
+                continue;
             LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
             LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
+
             double timesBetween = Duration.between(startTime, endTime).toMinutes();
             timesBetween = timesBetween / 60;
 
@@ -109,7 +112,9 @@ public class SalaryServiceImpl implements SalaryService {
 
             heSoLuong += timesBetween / 8;
         }
-        double luong = heSoLuong * staffEntity.getSalaryEntity().getSalary();
+        double luong = 0D;
+        if(staffEntity.getSalaryEntity() != null)//####
+            luong = heSoLuong * staffEntity.getSalaryEntity().getSalary();
         StaffDTO staffDTO = new StaffDTO(staffEntity);
         return new StaffSalaryDTO(staffDTO, heSoLuong, luong);
     }
@@ -121,7 +126,7 @@ public class SalaryServiceImpl implements SalaryService {
             workbook = new HSSFWorkbook();
             CreationHelper createHelper = workbook.getCreationHelper();
             Sheet sheet = workbook.createSheet("Report");
-            sheet.addMergedRegion(new CellRangeAddress(0, 0 , 0, 4));
+            sheet.addMergedRegion(new CellRangeAddress(0, 0 , 0, 3));
 
             List<StaffEntity> listStaffEntity = staffRepository.findAll();
             List<StaffSalaryDTO> listStaffSalaryDTO = new ArrayList<>();
@@ -130,7 +135,7 @@ public class SalaryServiceImpl implements SalaryService {
             int month = date.getMonth();
 
             for (StaffEntity s : listStaffEntity){
-                listStaffSalaryDTO.add(calculateSalary(s.getId(),month));
+                listStaffSalaryDTO.add(calculateSalary(s.getId(),month + 1));
             }
 
             HSSFFont font = workbook.createFont();
@@ -178,7 +183,7 @@ public class SalaryServiceImpl implements SalaryService {
 
             rowHeader.setHeightInPoints(33);
             cellHeader = rowHeader.createCell(cellIndex);
-            cellHeader.setCellValue("THỐNG KÊ Lương");
+            cellHeader.setCellValue("THỐNG KÊ LƯƠNG");
             cellHeader.setCellStyle(headerCellStyle);
 
             rowHeader = sheet.createRow(rowIndex +=1);
@@ -191,7 +196,7 @@ public class SalaryServiceImpl implements SalaryService {
             cellHeader.setCellStyle(headerCellStyle);
 
             cellHeader = rowHeader.createCell(cellIndex += 1);
-            cellHeader.setCellValue("Hệ Số Lương ");
+            cellHeader.setCellValue("Hệ số lương ");
             cellHeader.setCellStyle(headerCellStyle);
 
             cellHeader = rowHeader.createCell(cellIndex += 1);

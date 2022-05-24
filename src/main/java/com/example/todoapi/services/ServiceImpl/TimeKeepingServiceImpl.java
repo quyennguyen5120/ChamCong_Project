@@ -126,6 +126,9 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
         if(timeKeepingInputDto.getEndDate() != null){
             whereClause += " and (t.endStart = :endStart)";
         }
+        if(timeKeepingInputDto.getStaffId() != null){
+            whereClause += " and (t.staff.id = :staffId)";
+        }
 
         sql += whereClause;
 
@@ -143,6 +146,9 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
         if(timeKeepingInputDto.getEndDate() != null){
             Date date = new Date(timeKeepingInputDto.getEndDate());
             q.setParameter("endStart",date);
+        }
+        if(timeKeepingInputDto.getStaffId() != null){
+            q.setParameter("staffId",timeKeepingInputDto.getStaffId());
         }
         return q.getResultList();
     }

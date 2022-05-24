@@ -131,7 +131,7 @@ public class SalaryServiceImpl implements SalaryService {
     }
 
     @Override
-    public Workbook exportBySearchDto(HttpServletResponse response) {
+    public Workbook exportBySearchDto(HttpServletResponse response,Integer month,Integer year) {
         HSSFWorkbook workbook = null;
         try {
             workbook = new HSSFWorkbook();
@@ -143,10 +143,10 @@ public class SalaryServiceImpl implements SalaryService {
             List<StaffSalaryDTO> listStaffSalaryDTO = new ArrayList<>();
 
             Date date = new Date();
-            int month = date.getMonth();
+//            int month = date.getMonth();
 
             for (StaffEntity s : listStaffEntity){
-                listStaffSalaryDTO.add(calculateSalary(s.getId(),month + 1));
+                listStaffSalaryDTO.add(calculateSalary(s.getId(),month, year ));
             }
 
             HSSFFont font = workbook.createFont();

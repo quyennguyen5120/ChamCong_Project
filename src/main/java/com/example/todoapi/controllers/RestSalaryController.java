@@ -53,8 +53,8 @@ public class RestSalaryController {
     }
 
     @Operation(summary = "Xuất tất cả tiền lương ra file excel", description = "Tiền lương của 1 hay nhiều user")
-    @GetMapping("/export")
-    public ResponseEntity<?> exportAllSalary(HttpServletResponse response){
-        return ResponseEntity.ok(salaryService.exportBySearchDto(response));
+    @GetMapping("/export/{month}/{year}")
+    public ResponseEntity<?> exportAllSalary(HttpServletResponse response, @PathVariable("month")Integer month, @PathVariable("year")Integer year){
+        return ResponseEntity.ok(salaryService.exportBySearchDto(response, month, year));
     }
 }

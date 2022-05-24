@@ -1,6 +1,7 @@
 package com.example.todoapi.services.ServiceImpl;
 
 import com.example.todoapi.dtos.InputDto.TimeKeepingInputDto;
+import com.example.todoapi.dtos.StaffDTO;
 import com.example.todoapi.dtos.TimekeepingDTO;
 import com.example.todoapi.entities.StaffEntity;
 import com.example.todoapi.entities.Timekeeping;
@@ -154,6 +155,7 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
             integers.add(date.getDayOfMonth());
         });
         timekeepingDTO.setDays(integers);
+        timekeepingDTO.setStaffDTO(new StaffDTO(staffRepository.getById(staffId)));
         return timekeepingDTO;
     }
 

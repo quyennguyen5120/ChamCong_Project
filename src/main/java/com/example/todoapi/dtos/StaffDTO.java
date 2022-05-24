@@ -31,39 +31,46 @@ public class StaffDTO {
 
 
     public StaffDTO(StaffEntity staffEntity){
-        this.id = staffEntity.getId();
-        this.fullname = staffEntity.getFullname();
-        this.address = staffEntity.getAddress();
-        this.email = staffEntity.getEmail();
-        this.age = staffEntity.getAge();
+        if(staffEntity != null){
+            this.id = staffEntity.getId();
+            if(staffEntity.getFullname() != null)
+                this.fullname = staffEntity.getFullname();
+            if(staffEntity.getAddress() != null)
+                this.address = staffEntity.getAddress();
+            if(staffEntity.getEmail() != null)
+                this.email = staffEntity.getEmail();
+            if(staffEntity.getAge() != null)
+                this.age = staffEntity.getAge();
 
-        if (staffEntity.getSalaryEntity() != null){
-            SalaryDto salaryDto = new SalaryDto(staffEntity.getSalaryEntity());
-        }
-
-        if (staffEntity.getUserEntity() != null){
-            UserDTO user= new UserDTO();
-            user.setId(staffEntity.getUserEntity().getId());
-            user.setUsername(staffEntity.getUserEntity().getUsername());
-            user.setEmail(staffEntity.getUserEntity().getEmail());
-            user.setPassword(staffEntity.getUserEntity().getPassword());
-            this.userDTO = user;
-        }
-        if(staffEntity.getSubUserEntity() != null){
-            UserDTO userParent= new UserDTO();
-            userParent.setId(staffEntity.getUserEntity().getId());
-            userParent.setUsername(staffEntity.getUserEntity().getUsername());
-            userParent.setEmail(staffEntity.getUserEntity().getEmail());
-            userParent.setPassword(staffEntity.getUserEntity().getPassword());
-            this.userParentDTO = userParent;
-        }
-        if(staffEntity.getTimekeepings() != null){
-            Set<TimekeepingDTO> timekeepingDTOS = new HashSet<>();
-            for(Timekeeping t : staffEntity.getTimekeepings()){
-                timekeepingDTOS.add(new TimekeepingDTO(t));
+            if (staffEntity.getSalaryEntity() != null){
+                SalaryDto salaryDto = new SalaryDto(staffEntity.getSalaryEntity());
             }
-            this.timekeepings = timekeepingDTOS;
-            this.timekeepingDTOS = timekeepingDTOS;
+
+            if (staffEntity.getUserEntity() != null){
+                UserDTO user= new UserDTO();
+                user.setId(staffEntity.getUserEntity().getId());
+                user.setUsername(staffEntity.getUserEntity().getUsername());
+                user.setEmail(staffEntity.getUserEntity().getEmail());
+                user.setPassword(staffEntity.getUserEntity().getPassword());
+                this.userDTO = user;
+            }
+            if(staffEntity.getSubUserEntity() != null){
+                UserDTO userParent= new UserDTO();
+                userParent.setId(staffEntity.getUserEntity().getId());
+                userParent.setUsername(staffEntity.getUserEntity().getUsername());
+                userParent.setEmail(staffEntity.getUserEntity().getEmail());
+                userParent.setPassword(staffEntity.getUserEntity().getPassword());
+                this.userParentDTO = userParent;
+            }
+            if(staffEntity.getTimekeepings() != null){
+                Set<TimekeepingDTO> timekeepingDTOS = new HashSet<>();
+                for(Timekeeping t : staffEntity.getTimekeepings()){
+                    timekeepingDTOS.add(new TimekeepingDTO(t));
+                }
+                this.timekeepings = timekeepingDTOS;
+                this.timekeepingDTOS = timekeepingDTOS;
+            }
         }
+
     }
 }

@@ -74,7 +74,6 @@ public class SalaryServiceImpl implements SalaryService {
         double luong = 0D;
         StaffEntity staffEntity = staffRepository.findById(staffId).get();
         StaffDTO staffDTO = new StaffDTO(staffEntity);
-        List<TimekeepingDTO> timekeepingDTOList = new ArrayList<>();
 
         if (month != null && year != null) {
             YearMonth yearMonth = YearMonth.of(year, month);
@@ -84,50 +83,55 @@ public class SalaryServiceImpl implements SalaryService {
             Date lastOfMonth = Date.from(localDate2.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             List<Timekeeping> timekeepingList = timeKeepingRepository.findAllByTimeStartBetweenAndStaffId(firstOfMonth, lastOfMonth, staffId);
+            List<TimekeepingDTO> timekeepingDTOList = new ArrayList<>();
             timekeepingList.forEach(t -> {
                 TimekeepingDTO timekeepingDTO = new TimekeepingDTO(t);
                 timekeepingDTOList.add(timekeepingDTO);
             });
 
             for (TimekeepingDTO t : timekeepingDTOList) {
-                if (t.getEndStart() != null) {
-                    LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
-                    LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
-
-                    double timesBetween = Duration.between(startTime, endTime).toMinutes();
-                    timesBetween = timesBetween / 60;
-
-                    if (timesBetween > 8)
-                        timesBetween = 8;
-                    if (t.getDimuon() != null)
-                        timesBetween -= t.getDimuon().doubleValue() / 60;
-                    if (t.getXinLamThem() != null) {
-                        if (t.getXinLamThem())
-                            timesBetween += t.getLamthem().doubleValue() / 60;
-                    }
-                    if (t.getXinVeSom() != null) {
-                        if (!t.getXinVeSom())
-                            timesBetween -= t.getVesom().doubleValue() / 60;
-                    } else {
-                        if (t.getVesom() != null)
-                            timesBetween -= t.getVesom().doubleValue() / 60;
-                    }
-
-                    heSoLuong += timesBetween / 8;
-                }
+                heSoLuong = getCoefficientsSalary(t, heSoLuong);
             }
         } else {
-            List<Timekeeping> timekeepingList = timeKeepingRepository.findAll();
-            timekeepingList.forEach(t -> {
-                TimekeepingDTO timekeepingDTO = new TimekeepingDTO(t);
-                timekeepingDTOList.add(timekeepingDTO);
-            });
+            List<TimekeepingDTO> timekeepingDTOList = timeKeepingRepository.findByStaffId(staffId);
+            for (TimekeepingDTO t : timekeepingDTOList) {
+                heSoLuong = getCoefficientsSalary(t, heSoLuong);
+            }
         }
 
         if(staffEntity.getSalaryEntity() != null)//####
             luong = heSoLuong * staffEntity.getSalaryEntity().getSalary();
 
         return new StaffSalaryDTO(staffDTO, heSoLuong, luong);
+    }
+    
+    public Double getCoefficientsSalary(TimekeepingDTO t, Double heSoLuong){
+        if (t.getEndStart() != null) {
+            LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
+            LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
+
+            double timesBetween = Duration.between(startTime, endTime).toMinutes();
+            timesBetween = timesBetween / 60;
+
+            if (timesBetween > 8)
+                timesBetween = 8;
+            if (t.getDimuon() != null)
+                timesBetween -= t.getDimuon().doubleValue() / 60;
+            if (t.getXinLamThem() != null) {
+                if (t.getXinLamThem())
+                    timesBetween += t.getLamthem().doubleValue() / 60;
+            }
+            if (t.getXinVeSom() != null) {
+                if (!t.getXinVeSom())
+                    timesBetween -= t.getVesom().doubleValue() / 60;
+            } else {
+                if (t.getVesom() != null)
+                    timesBetween -= t.getVesom().doubleValue() / 60;
+            }
+
+            heSoLuong += timesBetween / 8;
+        }
+        return heSoLuong;
     }
 
     @Override
@@ -145,9 +149,9 @@ public class SalaryServiceImpl implements SalaryService {
             Date date = new Date();
             int month = date.getMonth();
 
-            for (StaffEntity s : listStaffEntity){
-                listStaffSalaryDTO.add(calculateSalary(s.getId(),month + 1));
-            }
+//            for (StaffEntity s : listStaffEntity){
+//                listStaffSalaryDTO.add(calculateSalary(s.getId(),month + 1));
+//            }
 
             HSSFFont font = workbook.createFont();
             font.setFontHeightInPoints((short) 12);

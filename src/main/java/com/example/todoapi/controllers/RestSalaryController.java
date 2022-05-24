@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/salary")
@@ -19,8 +20,10 @@ public class RestSalaryController {
 
     @Operation(summary = "Tính lương trong 1 tháng theo staff id")
     @GetMapping("/staff/{staffId}")
-    public ResponseEntity<?> calculateSalary(@PathVariable Long staffId, @RequestParam("month") Integer month, @RequestParam("year") Integer year){
-        return ResponseEntity.ok().body(salaryService.calculateSalary(staffId, month, year));
+    public ResponseEntity<?> calculateSalary(@PathVariable Long staffId,
+                                             @RequestParam(value = "month", required = false) Optional<Integer> month,
+                                             @RequestParam(value = "year", required = false) Optional<Integer> year){
+        return ResponseEntity.ok().body(salaryService.calculateSalary(staffId, month.orElse(null), year.orElse(null)));
     }
 
     @Operation(summary = "Thêm Số tiền lương", description = "Tiền lương của 1 hay nhiều user")

@@ -64,6 +64,14 @@ public class RestSalaryController {
     @GetMapping("/export")
     public ResponseEntity<?> exportAllSalary(HttpServletResponse response,
                                             @RequestParam(value = "month", required = false) Optional<Integer> month,
+                                             @RequestParam(value = "year", required = false) Optional<Integer> year){
+        return ResponseEntity.ok(salaryService.exportBySearchDto(response, month.orElse(null), year.orElse(null)));
+    }
+
+    @Operation(summary = "Xuất tất cả tiền lương ra file excel", description = "Tiền lương của 1 hay nhiều user")
+    @GetMapping("/export_new")
+    public ResponseEntity<?> exportAllSalary_new(HttpServletResponse response,
+                                             @RequestParam(value = "month", required = false) Optional<Integer> month,
                                              @RequestParam(value = "year", required = false) Optional<Integer> year) throws IOException {
         File file = new File("poi-generated-file.xlsx");
         Files.copy(file.toPath(), response.getOutputStream());

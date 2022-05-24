@@ -12,4 +12,5 @@ public class TimeKeepingInputDto {
     private String startDate;
     private String endDate;
     private Boolean is_Active;
+    private Long staffId;
 }

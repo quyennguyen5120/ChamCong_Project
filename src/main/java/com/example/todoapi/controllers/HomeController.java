@@ -3,6 +3,7 @@ package com.example.todoapi.controllers;
 import com.example.todoapi.dtos.JwtResponse;
 import com.example.todoapi.dtos.LoginRequest;
 import com.example.todoapi.dtos.SignupRequest;
+import com.example.todoapi.dtos.StaffSalaryDTO;
 import com.example.todoapi.entities.RefreshToken;
 import com.example.todoapi.entities.RoleEntity;
 import com.example.todoapi.entities.StaffEntity;
@@ -13,6 +14,7 @@ import com.example.todoapi.payload.response.TokenRefreshResponse;
 import com.example.todoapi.repositories.RoleRepository;
 import com.example.todoapi.repositories.StaffRepository;
 import com.example.todoapi.repositories.UserRepository;
+import com.example.todoapi.services.MailService;
 import com.example.todoapi.services.RefreshTokenService;
 import com.example.todoapi.services.UserDetailsImpl;
 import com.example.todoapi.services.UserService;
@@ -27,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,6 +52,8 @@ public class HomeController {
     StaffRepository staffRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    MailService mailService;
 
     @Operation(summary = "Đăng nhập", description = "")
     @PostMapping("/signin")
@@ -104,4 +109,13 @@ public class HomeController {
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest){
         return ResponseEntity.ok(userService.addNewUser(signupRequest));
     }
+
+    @Operation(summary = "Gửi mail lương tháng này cho 1 người bất kỳ", description = "gửi mail cho 1 bất ky")
+    @GetMapping("/sendMailByMail")
+    public ResponseEntity<?> sendMailByMail(
+            @RequestParam(value = "email", required = false) Optional<String> email,
+            @RequestParam(value = "content", required = false) Optional<String> content,
+            @RequestParam(value = "title", required = false) Optional<String> title){
+        return ResponseEntity.ok(mailService.SendMailByEmailAndContent(email.orElse(null),content.orElse(null),title.orElse(null)));
+    };
 }

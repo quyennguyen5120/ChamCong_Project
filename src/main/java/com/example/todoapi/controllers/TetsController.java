@@ -8,6 +8,7 @@ import com.example.todoapi.services.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,17 +27,19 @@ public class TetsController {
     MailService mailService;
 
     @GetMapping(value = "/test")
-    public String index(){
+    public String index(Model model){
+
         return "index";
     }
     @GetMapping ("/sendmail")
     public String testmail(){
-        List<StaffDTO> listStaffDTOs= staffService.getAll();
-        List<StaffSalaryDTO> listStaffSalaryDTO = new ArrayList<>();
-        for (StaffDTO s : listStaffDTOs){
-            listStaffSalaryDTO.add(salaryService.calculateSalary(s.getId(),1, 2022));
-        };
-        mailService.sendMail(listStaffSalaryDTO);
+//        List<StaffDTO> listStaffDTOs= staffService.getAll();
+//        List<StaffSalaryDTO> listStaffSalaryDTO = new ArrayList<>();
+//        for (StaffDTO s : listStaffDTOs){
+//            listStaffSalaryDTO.add(salaryService.calculateSalary(s.getId(),1, 2022));
+//        };
+//        mailService.sendMail(listStaffSalaryDTO);
+        mailService.SendMailByEmailAndContent("quyenproxxxxx@gmail.com","test","test 234");
         return "redirect:/test";
     }
 }

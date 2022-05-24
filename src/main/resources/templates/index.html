@@ -1,0 +1,31 @@
+<div class="container mt-5">
+    <h2 style="color: red">Thanh toán thành công!</h2>
+    <h4>Chi tiết đơn hàng đã mua</h4>
+    <table style="border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);">
+        <thead>
+        <tr style="background-color: #009879;
+    color: #ffffff;
+    text-align: left;">
+            <td>Sản phẩm</td>
+            <td>Đơn giá</td>
+            <td>Số lượng</td>
+            <td>Thành tiền</td>
+        </tr>
+        </thead>
+        <tbody style="border-bottom: 1px solid #dddddd;">
+        <tr style="border-bottom: 1px solid #dddddd;" th:each="item :${StaffSalaryDTO}">
+            <td style=" padding: 12px 15px;">
+                <span th:text="${item.staffDTO.fullname}"></span>
+            </td>
+            <td style=" padding: 12px 15px;" th:text ="${item.heSoLuong}"></td>
+            <td style=" padding: 12px 15px;" th:text ="${item.luong}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

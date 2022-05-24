@@ -2,14 +2,21 @@ package com.example.todoapi.controllers;
 
 import com.example.todoapi.dtos.SalaryDto;
 import com.example.todoapi.dtos.StaffDTO;
+import com.example.todoapi.dtos.StaffSalaryDTO;
+import com.example.todoapi.entities.StaffEntity;
+import com.example.todoapi.services.MailService;
 import com.example.todoapi.services.SalaryService;
 import com.example.todoapi.services.ServiceImpl.SalaryServiceImpl;
+import com.example.todoapi.services.StaffService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,6 +24,10 @@ import java.util.Optional;
 public class RestSalaryController {
     @Autowired
     SalaryService salaryService;
+    @Autowired
+    MailService mailService;
+    @Autowired
+    StaffService  staffService;
 
     @Operation(summary = "Tính lương trong 1 tháng theo staff id")
     @GetMapping("/staff/{staffId}")
@@ -61,5 +72,17 @@ public class RestSalaryController {
                                             @RequestParam(value = "month", required = false) Optional<Integer> month,
                                              @RequestParam(value = "year", required = false) Optional<Integer> year){
         return ResponseEntity.ok(salaryService.exportBySearchDto(response, month.orElse(null), year.orElse(null)));
+    }
+    @Operation(summary = "Gửi mail lương tháng này cho tất cả nhân viên", description = "gửi từng 1 user 1")
+    @GetMapping("/export1")
+    public ResponseEntity<?> sendMailSalaryAllStaff(
+                                                    @RequestParam(value = "month", required = false) Optional<Integer> month,
+                                                    @RequestParam(value = "year", required = false) Optional<Integer> year){
+        List<StaffDTO> listStaffDTOs= staffService.getAll();
+        List<StaffSalaryDTO> listStaffSalaryDTO = new ArrayList<>();
+        for (StaffDTO s : listStaffDTOs){
+            listStaffSalaryDTO.add(salaryService.calculateSalary(s.getId(),month.orElse(null), year.orElse(null)));
+        };
+        return ResponseEntity.ok(mailService.sendMail(listStaffSalaryDTO));
     }
 }

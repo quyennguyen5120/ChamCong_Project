@@ -43,6 +43,7 @@ public class StaffServiceImpl implements StaffService {
             List<TimekeepingDTO> timekeepingDTOS = timeKeepingRepository.findByStaffId(x.getId());
             Set<TimekeepingDTO> foo = new HashSet<TimekeepingDTO>(timekeepingDTOS);
             x.setTimekeepings(foo);
+            x.setTimekeepingDTOS(foo);
         });
 
         return staffDTOS;
@@ -127,6 +128,5 @@ public class StaffServiceImpl implements StaffService {
     public List<UserDTO> findAllByIdRole(int id) {
         return userRepository.findUserEntitiesByRoleName(id);
     }
-
 
 }

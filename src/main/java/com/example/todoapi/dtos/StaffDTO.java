@@ -26,6 +26,7 @@ public class StaffDTO {
     private UserDTO userDTO;
     private UserDTO userParentDTO;
     private Set<TimekeepingDTO> timekeepings;
+    private Set<TimekeepingDTO> timekeepingDTOS;
     private TimekeepingDTO timekeepingConvert;
 
 
@@ -62,8 +63,7 @@ public class StaffDTO {
                 timekeepingDTOS.add(new TimekeepingDTO(t));
             }
             this.timekeepings = timekeepingDTOS;
+            this.timekeepingDTOS = timekeepingDTOS;
         }
     }
-
-
 }

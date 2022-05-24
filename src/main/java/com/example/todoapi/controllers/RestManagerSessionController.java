@@ -32,11 +32,11 @@ public class RestManagerSessionController {
     public Boolean accept_vesom(@PathVariable("staffId") Long staffId, @RequestBody TimekeepingDTO timekeepingDTO){
         return managerSessionService.accept_vesom(staffId,timekeepingDTO.getId());
     }
+
     @PostMapping(value = "/accept_lamthem/{staffId}")
     public Boolean accept_lamthem(@PathVariable("staffId") Long staffId, @RequestBody TimekeepingDTO timekeepingDTO){
         return managerSessionService.accept_lamthem(staffId,timekeepingDTO.getId());
     }
-
 
     @GetMapping(value = "/getvesom")
     public List<ManagerSessionDto> getvesom(){

@@ -1,5 +1,6 @@
 package com.example.todoapi.entities;
 
+import com.example.todoapi.dtos.TimekeepingDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

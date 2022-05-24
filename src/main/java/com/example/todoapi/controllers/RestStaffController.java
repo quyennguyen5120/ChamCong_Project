@@ -33,10 +33,14 @@ public class RestStaffController {
     public ResponseEntity<?> saveStaff(@RequestBody StaffDTO staffDTO){
         return ResponseEntity.ok(staffService.saveOrUpdate(staffDTO));
     }
+
+    @ApiOperation(value = "Sửa 1 staff", notes = "Gửi về 1 staff có id")
     @PostMapping(value = "/update")
     public ResponseEntity<?> updateStaff(@RequestBody StaffDTO staffDTO){
         return ResponseEntity.ok(staffService.saveOrUpdate(staffDTO));
     }
+
+    @ApiOperation(value = "Xoá 1 staff", notes = "Gửi về id staff")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteByIdStaff(@PathVariable("id") Long id){
         return ResponseEntity.ok(staffService.deleteById(id));
@@ -47,6 +51,8 @@ public class RestStaffController {
     public ResponseEntity<?> findByIdStaff(@PathVariable("id") Long id){
         return ResponseEntity.ok(staffService.findById(id));
     }
+
+    @ApiOperation(value = "Lấy tất cả user theo id của role", notes = "Gửi về list user")
     @GetMapping("/getAllUser/{id}")
     public ResponseEntity<?> getAllUserByRoles(@PathVariable("id") int id){
         return ResponseEntity.ok(staffService.findAllByIdRole(id));

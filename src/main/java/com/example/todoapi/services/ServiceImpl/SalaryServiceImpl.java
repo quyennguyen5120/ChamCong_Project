@@ -140,7 +140,7 @@ public class SalaryServiceImpl implements SalaryService {
             int month = date.getMonth();
 
             for (StaffEntity s : listStaffEntity){
-                listStaffSalaryDTO.add(calculateSalary(s.getId(),month + 1));
+                listStaffSalaryDTO.add(calculateSalary(s.getId(),month + 1 ));
             }
 
             HSSFFont font = workbook.createFont();

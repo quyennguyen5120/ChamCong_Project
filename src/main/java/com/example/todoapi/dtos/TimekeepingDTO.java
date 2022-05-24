@@ -35,21 +35,25 @@ public class TimekeepingDTO {
     private List<Integer> days;
 
     public TimekeepingDTO(Timekeeping timekeeping){
-        this.id = timekeeping.getId();
-        this.timeStart = timekeeping.getTimeStart();
-        this.endStart = timekeeping.getEndStart();
-        this.lamthem = timekeeping.getLamthem();
-        this.dimuon = timekeeping.getDimuon();
-        this.vesom = timekeeping.getVesom();
-        this.lamthem = timekeeping.getLamthem();
-        this.xinVeSom = timekeeping.getXinVeSom();
-        this.is_Active = timekeeping.getIsActive();
-        StaffDTO s = new StaffDTO();
-        s.setAddress(timekeeping.getStaff().getAddress());
-        s.setAge(timekeeping.getStaff().getAge());
-        s.setFullname(timekeeping.getStaff().getFullname());
-        s.setEmail(timekeeping.getStaff().getEmail());
-        s.setId(timekeeping.getId());
-        this.staffDTO = s;
+        if(timekeeping != null){
+            this.id = timekeeping.getId();
+            this.timeStart = timekeeping.getTimeStart();
+            this.endStart = timekeeping.getEndStart();
+            this.lamthem = timekeeping.getLamthem();
+            this.dimuon = timekeeping.getDimuon();
+            this.vesom = timekeeping.getVesom();
+            this.lamthem = timekeeping.getLamthem();
+            this.xinVeSom = timekeeping.getXinVeSom();
+            this.is_Active = timekeeping.getIsActive();
+            if(timekeeping.getStaff() != null){
+                StaffDTO s = new StaffDTO();
+                s.setAddress(timekeeping.getStaff().getAddress());
+                s.setAge(timekeeping.getStaff().getAge());
+                s.setFullname(timekeeping.getStaff().getFullname());
+                s.setEmail(timekeeping.getStaff().getEmail());
+                s.setId(timekeeping.getId());
+                this.staffDTO = s;
+            }
+        }
     }
 }

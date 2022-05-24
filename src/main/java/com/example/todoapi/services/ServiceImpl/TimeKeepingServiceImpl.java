@@ -159,7 +159,7 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
         });
         timekeepingDTO.setDays(integers);
         timekeepingDTO.setStaffDTO(new StaffDTO(staffRepository.getById(staffId)));
-//        timekeepingDTO.setStaffSalaryDTO(salaryService.calculateSalary());
+        timekeepingDTO.setStaffSalaryDTO(salaryService.calculateSalary(staffId,month,year));
         return timekeepingDTO;
     }
 

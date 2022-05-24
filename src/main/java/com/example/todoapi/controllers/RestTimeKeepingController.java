@@ -5,7 +5,7 @@ import com.example.todoapi.dtos.ResponseDto;
 import com.example.todoapi.dtos.TimekeepingDTO;
 import com.example.todoapi.repositories.TimeKeepingRepository;
 import com.example.todoapi.services.TimeKeepingService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +21,14 @@ public class RestTimeKeepingController {
     TimeKeepingService timeKeepingService;
 
 //    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @ApiOperation(value = "Bắt đầu chấm công")
+    @Operation(summary = "Bắt đầu chấm công")
     @RequestMapping(value = "/{staffId}", method = RequestMethod.GET)
     public ResponseEntity<?> requestTimeKeeping(@PathVariable("staffId") Long staffId){
         return ResponseEntity.ok(timeKeepingService.requestTimeKeeping(staffId));
     }
 
 //    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @ApiOperation(value = "Chấm công lúc về")
+    @Operation(summary = "Chấm công lúc về")
     @RequestMapping(value = "/logout/{staffId}", method = RequestMethod.GET)
     public ResponseEntity<?> logoutTimeKeeping(@PathVariable("staffId") Long staffId){
         return ResponseEntity.ok(timeKeepingService.logoutTimeKeeping(staffId));
@@ -47,25 +47,25 @@ public class RestTimeKeepingController {
     }
 
     //    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @ApiOperation(value = "Tìm chấm công theo staff id", notes = "")
+    @Operation(summary = "Tìm chấm công theo staff id")
     @RequestMapping(value = "/getByStaff/{staffId}", method = RequestMethod.GET)
     public ResponseEntity<?> getByStaff(@PathVariable("staffId")Long staffId){
         return ResponseEntity.ok(timeKeepingService.getByStaff(staffId));
     }
 
-    @ApiOperation(value = "Lấy tất cả chấm công của staff", notes = "")
+    @Operation(summary = "Lấy tất cả chấm công của staff")
     @RequestMapping(value = "/getAllByStaff", method = RequestMethod.GET)
     public ResponseEntity<?> getByStaff(){
         return ResponseEntity.ok(timeKeepingService.getByAllStaff());
     }
 
-    @ApiOperation(value = "Thêm số giờ làm thêm staff", notes = "")
+    @Operation(summary = "Thêm số giờ làm thêm staff")
     @RequestMapping(value = "/lamthem/{staffId}/{sogio}", method = RequestMethod.GET)
     public ResponseEntity<?> getByStaff(@PathVariable("staffId")Long staffId, @PathVariable("sogio")Long sogio){
         return ResponseEntity.ok(timeKeepingService.lamthem(staffId,sogio));
     }
 
-    @ApiOperation(value = "Thêm số giờ staff về sớm", notes = "")
+    @Operation(summary = "Thêm số giờ staff về sớm")
     @RequestMapping(value = "/xinvesom/{staffId}", method = RequestMethod.GET)
     public ResponseEntity<?> xinvesom(@PathVariable("staffId")Long staffId){
         return ResponseEntity.ok(timeKeepingService.xinvesom(staffId));

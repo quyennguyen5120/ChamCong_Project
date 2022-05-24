@@ -14,6 +14,6 @@ public interface SalaryService {
     SalaryDto findById(Long id);
     boolean deleteById(Long id);
     SalaryDto saveOrUpdate(SalaryDto salaryDto);
-    StaffSalaryDTO calculateSalary(Long staffId, int month, int year);
+    StaffSalaryDTO calculateSalary(Long staffId, Integer month, Integer year);
     Workbook exportBySearchDto(HttpServletResponse response);
 }

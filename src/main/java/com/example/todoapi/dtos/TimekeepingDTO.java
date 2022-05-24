@@ -33,6 +33,7 @@ public class TimekeepingDTO {
     private String description;
     private Boolean isComplete;
     private List<Integer> days;
+    private StaffSalaryDTO staffSalaryDTO;
 
     public TimekeepingDTO(Timekeeping timekeeping){
         if(timekeeping != null){

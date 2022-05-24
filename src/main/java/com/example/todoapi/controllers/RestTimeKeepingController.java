@@ -48,15 +48,18 @@ public class RestTimeKeepingController {
 
     //    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @Operation(summary = "Tìm chấm công theo staff id")
-    @RequestMapping(value = "/getByStaff/{staffId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getByStaff(@PathVariable("staffId")Long staffId){
-        return ResponseEntity.ok(timeKeepingService.getByStaff(staffId));
+    @RequestMapping(value = "/getByStaff/{staffId}/{month}/{year}", method = RequestMethod.GET)
+    public ResponseEntity<?> getByStaff(@PathVariable("staffId")Long staffId
+            , @PathVariable("month") Integer month
+            , @PathVariable("year") Integer year){
+        return ResponseEntity.ok(timeKeepingService.getByStaff(staffId, month , year));
     }
 
     @Operation(summary = "Lấy tất cả chấm công của staff")
-    @RequestMapping(value = "/getAllByStaff", method = RequestMethod.GET)
-    public ResponseEntity<?> getByStaff(){
-        return ResponseEntity.ok(timeKeepingService.getByAllStaff());
+    @RequestMapping(value = "/getAllByStaff/{month}/{year}", method = RequestMethod.GET)
+    public ResponseEntity<?> getByStaff(@PathVariable("month") Integer month
+            , @PathVariable("year") Integer year){
+        return ResponseEntity.ok(timeKeepingService.getByAllStaff(month , year));
     }
 
     @Operation(summary = "Thêm số giờ làm thêm staff")

@@ -16,6 +16,7 @@ import com.example.todoapi.repositories.UserRepository;
 import com.example.todoapi.services.RefreshTokenService;
 import com.example.todoapi.services.UserDetailsImpl;
 import com.example.todoapi.services.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,6 +50,7 @@ public class HomeController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @ApiOperation(value = "Đăng nhập", notes = "")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
@@ -97,6 +99,7 @@ public class HomeController {
         return "";
     }
 
+    @ApiOperation(value = "Đăng ký", notes = "")
     @PostMapping("/signup")
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest){
         return ResponseEntity.ok(userService.addNewUser(signupRequest));

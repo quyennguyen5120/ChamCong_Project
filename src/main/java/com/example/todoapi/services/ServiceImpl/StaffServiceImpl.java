@@ -44,7 +44,7 @@ public class StaffServiceImpl implements StaffService {
         staffDTOS.forEach(x->{
             List<TimekeepingDTO> timekeepingDTOS = timeKeepingRepository.findByStaffId(x.getId());
             Set<TimekeepingDTO> foo = new HashSet<TimekeepingDTO>(timekeepingDTOS);
-            x.setTimekeeping(foo);
+            x.setTimekeepingDTOS(foo);
         });
 
         return staffDTOS;

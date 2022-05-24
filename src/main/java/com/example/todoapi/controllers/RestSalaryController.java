@@ -56,8 +56,10 @@ public class RestSalaryController {
     }
 
     @Operation(summary = "Xuất tất cả tiền lương ra file excel", description = "Tiền lương của 1 hay nhiều user")
-    @GetMapping("/export/{month}/{year}")
-    public ResponseEntity<?> exportAllSalary(HttpServletResponse response, @PathVariable("month")Integer month, @PathVariable("year")Integer year){
-        return ResponseEntity.ok(salaryService.exportBySearchDto(response, month, year));
+    @GetMapping("/export")
+    public ResponseEntity<?> exportAllSalary(HttpServletResponse response,
+                                            @RequestParam(value = "month", required = false) Optional<Integer> month,
+                                             @RequestParam(value = "year", required = false) Optional<Integer> year){
+        return ResponseEntity.ok(salaryService.exportBySearchDto(response, month.orElse(null), year.orElse(null)));
     }
 }

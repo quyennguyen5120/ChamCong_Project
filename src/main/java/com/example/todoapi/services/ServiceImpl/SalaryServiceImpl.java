@@ -83,7 +83,7 @@ public class SalaryServiceImpl implements SalaryService {
             Date firstOfMonth = Date.from(localDate1.atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date lastOfMonth = Date.from(localDate2.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            List<Timekeeping> timekeepingList = timeKeepingRepository.findAllByTimeStartBetween(firstOfMonth, lastOfMonth);
+            List<Timekeeping> timekeepingList = timeKeepingRepository.findAllByTimeStartBetweenAndStaffId(firstOfMonth, lastOfMonth, staffId);
             timekeepingList.forEach(t -> {
                 TimekeepingDTO timekeepingDTO = new TimekeepingDTO(t);
                 timekeepingDTOList.add(timekeepingDTO);

@@ -130,7 +130,6 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
             whereClause += " and (t.staff.id = :staffId)";
         }
 
-
         sql += whereClause;
 
         sql += " order by  sp.code  asc";

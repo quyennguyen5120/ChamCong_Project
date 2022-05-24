@@ -69,9 +69,9 @@ public class SalaryServiceImpl implements SalaryService {
         return new SalaryDto(salaryEntity);
     }
 
-    public StaffSalaryDTO calculateSalary(Long staffId, int month){
+    public StaffSalaryDTO calculateSalary(Long staffId, int month, int year){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        YearMonth yearMonth = YearMonth.of(YearMonth.now().getYear(), month);
+        YearMonth yearMonth = YearMonth.of(year, month);
         LocalDate localDate1 = yearMonth.atDay(1);
         LocalDate localDate2 = yearMonth.atEndOfMonth();
         Date firstOfMonth = Date.from(localDate1.atStartOfDay(ZoneId.systemDefault()).toInstant());

@@ -89,7 +89,7 @@ public class SalaryServiceImpl implements SalaryService {
             LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
             LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
             double timesBetween = Duration.between(startTime, endTime).toMinutes();
-            timesBetween = timesBetween / 60 - 1;
+            timesBetween = timesBetween / 60;
 
             if (timesBetween > 8)
                 timesBetween = 8;

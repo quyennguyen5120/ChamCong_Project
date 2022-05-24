@@ -19,7 +19,7 @@ public class RestSalaryController {
 
     @Operation(summary = "Tính lương trong 1 tháng theo staff id")
     @GetMapping("/staff/{staffId}")
-    public ResponseEntity<?> calculateSalary(@PathVariable Long staffId, @RequestParam("month") int month, @RequestParam("year") int year){
+    public ResponseEntity<?> calculateSalary(@PathVariable Long staffId, @RequestParam("month") Integer month, @RequestParam("year") Integer year){
         return ResponseEntity.ok().body(salaryService.calculateSalary(staffId, month, year));
     }
 

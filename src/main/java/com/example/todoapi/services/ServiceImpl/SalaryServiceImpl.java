@@ -69,53 +69,59 @@ public class SalaryServiceImpl implements SalaryService {
         return new SalaryDto(salaryEntity);
     }
 
-    public StaffSalaryDTO calculateSalary(Long staffId, int month, int year){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        YearMonth yearMonth = YearMonth.of(year, month);
-        LocalDate localDate1 = yearMonth.atDay(1);
-        LocalDate localDate2 = yearMonth.atEndOfMonth();
-        Date firstOfMonth = Date.from(localDate1.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date lastOfMonth = Date.from(localDate2.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        List<Timekeeping> timekeepingList = timeKeepingRepository.findAllByTimeStartBetween(firstOfMonth, lastOfMonth);
-        List<TimekeepingDTO> timekeepingDTOList = new ArrayList<>();
-        timekeepingList.forEach(t -> {
-            TimekeepingDTO timekeepingDTO = new TimekeepingDTO(t);
-            timekeepingDTOList.add(timekeepingDTO);
-        });
-
+    public StaffSalaryDTO calculateSalary(Long staffId, Integer month, Integer year){
         double heSoLuong = 0;
         double luong = 0D;
-
         StaffEntity staffEntity = staffRepository.findById(staffId).get();
         StaffDTO staffDTO = new StaffDTO(staffEntity);
+        List<TimekeepingDTO> timekeepingDTOList = new ArrayList<>();
 
-        for (TimekeepingDTO t: timekeepingDTOList){
-            if(t.getEndStart() != null) {
-                LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
-                LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
+        if (month != null && year != null) {
+            YearMonth yearMonth = YearMonth.of(year, month);
+            LocalDate localDate1 = yearMonth.atDay(1);
+            LocalDate localDate2 = yearMonth.atEndOfMonth();
+            Date firstOfMonth = Date.from(localDate1.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date lastOfMonth = Date.from(localDate2.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-                double timesBetween = Duration.between(startTime, endTime).toMinutes();
-                timesBetween = timesBetween / 60;
+            List<Timekeeping> timekeepingList = timeKeepingRepository.findAllByTimeStartBetweenAndStaffId(firstOfMonth, lastOfMonth, staffId);
+            timekeepingList.forEach(t -> {
+                TimekeepingDTO timekeepingDTO = new TimekeepingDTO(t);
+                timekeepingDTOList.add(timekeepingDTO);
+            });
 
-                if (timesBetween > 8)
-                    timesBetween = 8;
-                if (t.getDimuon() != null)
-                    timesBetween -= t.getDimuon().doubleValue() / 60;
-                if (t.getXinLamThem() != null) {
-                    if (t.getXinLamThem())
-                        timesBetween += t.getLamthem().doubleValue() / 60;
+            for (TimekeepingDTO t : timekeepingDTOList) {
+                if (t.getEndStart() != null) {
+                    LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
+                    LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
+
+                    double timesBetween = Duration.between(startTime, endTime).toMinutes();
+                    timesBetween = timesBetween / 60;
+
+                    if (timesBetween > 8)
+                        timesBetween = 8;
+                    if (t.getDimuon() != null)
+                        timesBetween -= t.getDimuon().doubleValue() / 60;
+                    if (t.getXinLamThem() != null) {
+                        if (t.getXinLamThem())
+                            timesBetween += t.getLamthem().doubleValue() / 60;
+                    }
+                    if (t.getXinVeSom() != null) {
+                        if (!t.getXinVeSom())
+                            timesBetween -= t.getVesom().doubleValue() / 60;
+                    } else {
+                        if (t.getVesom() != null)
+                            timesBetween -= t.getVesom().doubleValue() / 60;
+                    }
+
+                    heSoLuong += timesBetween / 8;
                 }
-                if (t.getXinVeSom() != null) {
-                    if (!t.getXinVeSom())
-                        timesBetween -= t.getVesom().doubleValue() / 60;
-                } else {
-                    if (t.getVesom() != null)
-                        timesBetween -= t.getVesom().doubleValue() / 60;
-                }
-
-                heSoLuong += timesBetween / 8;
             }
+        } else {
+            List<Timekeeping> timekeepingList = timeKeepingRepository.findAll();
+            timekeepingList.forEach(t -> {
+                TimekeepingDTO timekeepingDTO = new TimekeepingDTO(t);
+                timekeepingDTOList.add(timekeepingDTO);
+            });
         }
 
         if(staffEntity.getSalaryEntity() != null)//####

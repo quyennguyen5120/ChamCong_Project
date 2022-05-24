@@ -25,6 +25,7 @@ public class StaffDTO {
     private SalaryDto salaryDto;
     private UserDTO userDTO;
     private UserDTO userParentDTO;
+    private Set<TimekeepingDTO> timekeepings;
     private Set<TimekeepingDTO> timekeepingDTOS;
     private TimekeepingDTO timekeepingConvert;
 
@@ -61,6 +62,7 @@ public class StaffDTO {
             for(Timekeeping t : staffEntity.getTimekeepings()){
                 timekeepingDTOS.add(new TimekeepingDTO(t));
             }
+            this.timekeepings = timekeepingDTOS;
             this.timekeepingDTOS = timekeepingDTOS;
         }
     }

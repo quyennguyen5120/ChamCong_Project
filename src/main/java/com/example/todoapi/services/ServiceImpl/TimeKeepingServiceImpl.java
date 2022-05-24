@@ -7,6 +7,7 @@ import com.example.todoapi.entities.StaffEntity;
 import com.example.todoapi.entities.Timekeeping;
 import com.example.todoapi.repositories.StaffRepository;
 import com.example.todoapi.repositories.TimeKeepingRepository;
+import com.example.todoapi.services.SalaryService;
 import com.example.todoapi.services.TimeKeepingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,8 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
     StaffRepository staffRepository;
     @Autowired
     EntityManager entityManager;
+    @Autowired
+    SalaryService salaryService;
 
     @Override
     public TimekeepingDTO requestTimeKeeping(Long staffId) {
@@ -145,7 +148,7 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
     }
 
     @Override
-    public TimekeepingDTO getByStaff(Long staffId) {
+    public TimekeepingDTO getByStaff(Long staffId, Integer month, Integer year) {
         List<TimekeepingDTO> timekeepingDTOS = timeKeepingRepository.findByStaffId(staffId);
         TimekeepingDTO timekeepingDTO = new TimekeepingDTO();
         List<Integer> integers = new ArrayList<>();
@@ -156,15 +159,16 @@ public class TimeKeepingServiceImpl implements TimeKeepingService {
         });
         timekeepingDTO.setDays(integers);
         timekeepingDTO.setStaffDTO(new StaffDTO(staffRepository.getById(staffId)));
+//        timekeepingDTO.setStaffSalaryDTO(salaryService.calculateSalary());
         return timekeepingDTO;
     }
 
     @Override
-    public List<TimekeepingDTO> getByAllStaff() {
+    public List<TimekeepingDTO> getByAllStaff(Integer month, Integer year) {
         List<StaffEntity> staffEntities = staffRepository.findAll();
         List<TimekeepingDTO> timekeepingDTOS = new ArrayList<>();
         staffEntities.forEach(x->{
-            TimekeepingDTO timekeepingDTO = this.getByStaff(x.getId());
+            TimekeepingDTO timekeepingDTO = this.getByStaff(x.getId(), month , year);
             timekeepingDTO.setDescription(x.getFullname());
             timekeepingDTOS.add(timekeepingDTO);
         });

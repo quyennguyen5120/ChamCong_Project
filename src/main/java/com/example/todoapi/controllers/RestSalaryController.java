@@ -6,10 +6,15 @@ import com.example.todoapi.services.SalaryService;
 import com.example.todoapi.services.ServiceImpl.SalaryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.net.URLConnection;
+import java.nio.file.Files;
 import java.util.Optional;
 
 @RestController
@@ -59,7 +64,17 @@ public class RestSalaryController {
     @GetMapping("/export")
     public ResponseEntity<?> exportAllSalary(HttpServletResponse response,
                                             @RequestParam(value = "month", required = false) Optional<Integer> month,
-                                             @RequestParam(value = "year", required = false) Optional<Integer> year){
-        return ResponseEntity.ok(salaryService.exportBySearchDto(response, month.orElse(null), year.orElse(null)));
+                                             @RequestParam(value = "year", required = false) Optional<Integer> year) throws IOException {
+        File file = new File("poi-generated-file.xlsx");
+        Files.copy(file.toPath(), response.getOutputStream());
+        String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+        String contentDisposition = String.format("attachment; filename=%s", file.getName());
+        int fileSize = Long.valueOf(file.length()).intValue();
+
+        response.setContentType(mimeType);
+        response.setHeader("Content-Disposition", contentDisposition);
+        response.setContentLength(fileSize);
+        return new ResponseEntity<>(HttpStatus.OK);
+//        return ResponseEntity.ok(salaryService.exportBySearchDto(response, month.orElse(null), year.orElse(null)));
     }
 }

@@ -2,7 +2,11 @@ package com.example.todoapi.services;
 
 import com.example.todoapi.dtos.SalaryDto;
 import com.example.todoapi.dtos.StaffSalaryDTO;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.hibernate.jdbc.Work;
 
+import javax.servlet.http.HttpServletResponse;
+import java.net.http.HttpRequest;
 import java.util.List;
 
 public interface SalaryService {
@@ -11,4 +15,5 @@ public interface SalaryService {
     boolean deleteById(Long id);
     SalaryDto saveOrUpdate(SalaryDto salaryDto);
     StaffSalaryDTO calculateSalary(Long staffId, int month);
+    Workbook exportBySearchDto(HttpServletResponse response);
 }

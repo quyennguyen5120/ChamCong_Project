@@ -1,5 +1,6 @@
 package com.example.todoapi.entities;
 
+import com.example.todoapi.dtos.TimekeepingDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,4 +34,6 @@ public class StaffEntity extends BaseEntity{
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sub_user")
     private UserEntity subUserEntity;
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<Timekeeping> timekeepings;
 }

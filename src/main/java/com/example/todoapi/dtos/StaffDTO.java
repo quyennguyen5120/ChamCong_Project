@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ public class StaffDTO {
     private SalaryDto salaryDto;
     private UserDTO userDTO;
     private UserDTO userParentDTO;
-    private Set<TimekeepingDTO> timekeeping;
+    private Set<TimekeepingDTO> timekeepingDTOS;
     private TimekeepingDTO timekeepingConvert;
 
 
@@ -55,7 +56,12 @@ public class StaffDTO {
             userParent.setPassword(staffEntity.getUserEntity().getPassword());
             this.userParentDTO = userParent;
         }
+        if(staffEntity.getTimekeepings() != null){
+            Set<TimekeepingDTO> timekeepingDTOS = new HashSet<>();
+            for(Timekeeping t : staffEntity.getTimekeepings()){
+                timekeepingDTOS.add(new TimekeepingDTO(t));
+            }
+            this.timekeepingDTOS = timekeepingDTOS;
+        }
     }
-
-
 }

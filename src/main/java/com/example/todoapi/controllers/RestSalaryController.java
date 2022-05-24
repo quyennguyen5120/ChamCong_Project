@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/api/salary")
 public class RestSalaryController {
@@ -41,5 +43,10 @@ public class RestSalaryController {
     @GetMapping()
     public ResponseEntity<?> getAll(){
         return ResponseEntity.ok(salaryService.getAll());
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<?> exportAllSalary(HttpServletResponse response){
+        return ResponseEntity.ok(salaryService.exportBySearchDto(response));
     }
 }

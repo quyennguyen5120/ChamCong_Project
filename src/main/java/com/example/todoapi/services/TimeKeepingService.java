@@ -12,9 +12,9 @@ public interface TimeKeepingService {
 
     List<TimekeepingDTO> findByEnabled(TimeKeepingInputDto timeKeepingInputDto);
 
-    TimekeepingDTO getByStaff(Long staffId);
+    TimekeepingDTO getByStaff(Long staffId, Integer month, Integer year);
 
-    List<TimekeepingDTO> getByAllStaff();
+    List<TimekeepingDTO> getByAllStaff(Integer month, Integer year);
 
     TimekeepingDTO lamthem(Long staffId, Long sogio);
 

@@ -227,7 +227,7 @@ public class SalaryServiceImpl implements SalaryService {
                 cellHeader.setCellStyle(contentCellStyle);
 
                 cellHeader = rowHeader.createCell(cellIndex += 1);
-                cellHeader.setCellValue(item.getHeSoLuong());
+                cellHeader.setCellValue(item.getLuong());
                 cellHeader.setCellStyle(contentCellStyle);
             }
             sheet.setColumnWidth(0, 7500);

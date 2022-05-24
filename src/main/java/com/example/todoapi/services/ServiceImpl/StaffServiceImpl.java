@@ -61,7 +61,7 @@ public class StaffServiceImpl implements StaffService {
         staffDTO.setAddress(staff.getAddress());
         staffDTO.setFullname(staff.getFullname());
         staffDTO.setAge(staff.getAge());
-        TimekeepingDTO timekeepingDTO = timeKeepingService.getByStaff(staff.getId());
+        TimekeepingDTO timekeepingDTO = timeKeepingService.getByStaff(staff.getId(), null , null);
         staffDTO.setTimekeepingConvert(timekeepingDTO);
         return staffDTO;
     }

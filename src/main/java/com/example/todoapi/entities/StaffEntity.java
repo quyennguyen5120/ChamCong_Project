@@ -34,6 +34,7 @@ public class StaffEntity extends BaseEntity{
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sub_user")
     private UserEntity subUserEntity;
+
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<Timekeeping> timekeepings;
 }

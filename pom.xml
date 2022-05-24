@@ -69,6 +69,10 @@
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
+
             <artifactId>poi-ooxml</artifactId>
             <version>3.17</version>
         </dependency>
@@ -78,6 +82,7 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.8</version>
         </dependency>
+
     </dependencies>
 
     <build>

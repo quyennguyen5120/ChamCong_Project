@@ -1,6 +1,7 @@
 package com.example.todoapi.services.ServiceImpl;
 
 import com.example.todoapi.dtos.StaffDTO;
+import com.example.todoapi.dtos.StaffSalaryDTO;
 import com.example.todoapi.dtos.TimekeepingDTO;
 import com.example.todoapi.dtos.UserDTO;
 import com.example.todoapi.entities.*;
@@ -10,16 +11,13 @@ import com.example.todoapi.repositories.TimeKeepingRepository;
 import com.example.todoapi.repositories.UserRepository;
 import com.example.todoapi.services.StaffService;
 import com.example.todoapi.services.TimeKeepingService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @Transactional
@@ -44,6 +42,7 @@ public class StaffServiceImpl implements StaffService {
         staffDTOS.forEach(x->{
             List<TimekeepingDTO> timekeepingDTOS = timeKeepingRepository.findByStaffId(x.getId());
             Set<TimekeepingDTO> foo = new HashSet<TimekeepingDTO>(timekeepingDTOS);
+            x.setTimekeepings(foo);
             x.setTimekeepingDTOS(foo);
         });
 
@@ -129,4 +128,5 @@ public class StaffServiceImpl implements StaffService {
     public List<UserDTO> findAllByIdRole(int id) {
         return userRepository.findUserEntitiesByRoleName(id);
     }
+
 }

@@ -15,7 +15,7 @@ buildJar:
     - /^live_[0-9]+(?:.[0-9]+)+$/ # regular expression live_0.0.1, live_0.0.2, live_0.0.3, etc.
   script:
     - echo "Building Jar"
-    - mvn -T 1C clean install -Dmaven.test.skip -DskipTests #build file jar
+    - mvn clean install -DskipTests #build file jar
     - echo "Build Jar Image" #start build image jar
     - docker build -t $TAG_COMMIT$JAR . #build image jar
     - echo "Build Nginx Image" #start build image nginx

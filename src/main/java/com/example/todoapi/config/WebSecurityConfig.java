@@ -27,10 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthEntryPointJwt unauthorizedHandler;
 
     private static final String[] AUTH_WHITELIST = {
-            "/swagger-resources/**",
             "/swagger-ui/**",
-            "/v3/api-docs",
-            "/webjars/**"
+            "/swagger-ui.html",
+            "/v3/api-docs/**"
     };
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -63,6 +62,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**");
+        web.ignoring().antMatchers(AUTH_WHITELIST);
     }
 }

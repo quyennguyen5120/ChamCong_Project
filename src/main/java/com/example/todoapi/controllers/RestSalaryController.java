@@ -4,6 +4,9 @@ import com.example.todoapi.dtos.SalaryDto;
 import com.example.todoapi.dtos.StaffDTO;
 import com.example.todoapi.services.SalaryService;
 import com.example.todoapi.services.ServiceImpl.SalaryServiceImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class RestSalaryController {
     @Autowired
     SalaryService salaryService;
+
     @GetMapping("/staff/{staffId}")
     public ResponseEntity<?> calculateSalary(@PathVariable Long staffId, @RequestParam("month") int month){
         return ResponseEntity.ok().body(salaryService.calculateSalary(staffId, month));

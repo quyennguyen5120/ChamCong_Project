@@ -41,14 +41,57 @@ public class MailServiceImpl implements MailService {
                 ctx.setVariable("StaffSalaryDTO", s);
                 final MimeMessage message = this.javaMailSender.createMimeMessage();
                 final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, "UTF-8");
-//                mimeMessageHelper.setTo(s.getStaffDTO().getEmail());
-                mimeMessageHelper.setTo("quyenproxxxxx@gmail.com");
+                mimeMessageHelper.setTo(s.getStaffDTO().getEmail());
                 mimeMessageHelper.setFrom(mailFrom);
                 mimeMessageHelper.setSubject("Lương Thưởng ");
                 String templateHtml = templateEngine.process("index", ctx);
                 mimeMessageHelper.setText(templateHtml, true);
                 this.javaMailSender.send(message);
             }
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean sendMailByStaff(StaffSalaryDTO staffSalaryDTO) {
+        try{
+                final Context ctx = new Context(LocaleContextHolder.getLocale());
+                ctx.setVariable("StaffSalaryDTO", staffSalaryDTO);
+                final MimeMessage message = this.javaMailSender.createMimeMessage();
+                final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, "UTF-8");
+                mimeMessageHelper.setTo(staffSalaryDTO.getStaffDTO().getEmail());
+//                mimeMessageHelper.setTo("quyenproxxxxx@gmail.com");
+                mimeMessageHelper.setFrom(mailFrom);
+                mimeMessageHelper.setSubject("Lương Thưởng ");
+                String templateHtml = templateEngine.process("index", ctx);
+                mimeMessageHelper.setText(templateHtml, true);
+                this.javaMailSender.send(message);
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean SendMailByEmailAndContent(String email, String content,String title) {
+        try{
+            final Context ctx = new Context(LocaleContextHolder.getLocale());
+            ctx.setVariable("content", content);
+            ctx.setVariable("email", email);
+            ctx.setVariable("title", title);
+            final MimeMessage message = this.javaMailSender.createMimeMessage();
+            final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, "UTF-8");
+            mimeMessageHelper.setTo(email);
+//                mimeMessageHelper.setTo("quyenproxxxxx@gmail.com");
+            mimeMessageHelper.setFrom(mailFrom);
+            mimeMessageHelper.setSubject(title);
+            String templateHtml = templateEngine.process("customEmail", ctx);
+            mimeMessageHelper.setText(templateHtml, true);
+            this.javaMailSender.send(message);
         }
         catch (Exception e){
             System.out.println(e);

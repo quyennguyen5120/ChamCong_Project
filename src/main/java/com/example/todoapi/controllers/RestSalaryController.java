@@ -78,8 +78,8 @@ public class RestSalaryController {
                                              @RequestParam(value = "year", required = false) Optional<Integer> year){
         return ResponseEntity.ok(salaryService.exportBySearchDto(response, month.orElse(null), year.orElse(null)));
     }
-    @Operation(summary = "Gửi mail lương tháng này cho tất cả nhân viên", description = "gửi từng 1 user 1")
-    @GetMapping("/export1")
+    @Operation(summary = "Gửi mail lương tháng này cho tất cả nhân viên", description = "gửi từng  user 1")
+    @GetMapping("/exportSalaryAll")
     public ResponseEntity<?> sendMailSalaryAllStaff(
                                                     @RequestParam(value = "month", required = false) Optional<Integer> month,
                                                     @RequestParam(value = "year", required = false) Optional<Integer> year){
@@ -89,6 +89,15 @@ public class RestSalaryController {
             listStaffSalaryDTO.add(salaryService.calculateSalary(s.getId(),month.orElse(null), year.orElse(null)));
         };
         return ResponseEntity.ok(mailService.sendMail(listStaffSalaryDTO));
+    };
+    @Operation(summary = "Gửi mail lương tháng này cho 1 nhân viên", description = "gửi mail cho 1 user")
+    @GetMapping("/exportSalaryById")
+    public ResponseEntity<?> sendMailSalaryByIdStaff(
+            @RequestParam(value = "id", required = false) Optional<Long> id,
+            @RequestParam(value = "month", required = false) Optional<Integer> month,
+            @RequestParam(value = "year", required = false) Optional<Integer> year){
+        StaffSalaryDTO staffSalaryDTO = salaryService.calculateSalary(id.orElse(null),month.orElse(null), year.orElse(null));
+        return ResponseEntity.ok(mailService.sendMailByStaff(staffSalaryDTO));
     };
 
 

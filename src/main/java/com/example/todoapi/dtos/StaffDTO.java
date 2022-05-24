@@ -29,7 +29,6 @@ public class StaffDTO {
     private Set<TimekeepingDTO> timekeepingDTOS;
     private TimekeepingDTO timekeepingConvert;
 
-
     public StaffDTO(StaffEntity staffEntity){
         if(staffEntity != null){
             this.id = staffEntity.getId();

@@ -1,6 +1,7 @@
 <div class="container mt-5">
-    <h2 style="color: red">Thanh toán thành công!</h2>
-    <h4>Chi tiết đơn hàng đã mua</h4>
+    <h2 style="color: red">Thông báo lương thưởng</h2>
+    <h4><span>nhân viên</span> <span th:text="${StaffSalaryDTO.staffDTO.fullname}"></span></h4>
+    <h4><span>Lương thưởng tháng này</span></h4>
     <table style="border-collapse: collapse;
     margin: 25px 0;
     font-size: 0.9em;
@@ -24,6 +25,39 @@
             </td>
             <td style=" padding: 12px 15px;" th:text ="${item.heSoLuong}"></td>
             <td style=" padding: 12px 15px;" th:text ="${item.luong}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4><span>Các Ngày Làm việc trong tháng</span> </h4>
+    <table style="border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);">
+        <thead>
+        <tr style="background-color: #009879;
+    color: #ffffff;
+    text-align: left;">
+            <td>STT </td>
+            <td>Ngày Đi Làm</td>
+            <td>Giờ Chấm Công Bắt Đầu</td>
+            <td>Giờ Chấm Công Kết Thúc</td>
+            <td>Đi Muộn</td>
+            <td>Làm Thêm</td>
+        </tr>
+        </thead>
+        <tbody style="border-bottom: 1px solid #dddddd;">
+        <tr style="border-bottom: 1px solid #dddddd;" th:each="item :${StaffSalaryDTO.staffDTO.timekeepings}">
+            <td style=" padding: 12px 15px;">
+                <span th:text="${item.DateWork}"></span>
+            </td>
+            <td style=" padding: 12px 15px;">
+                <span th:text="${item.timeStart}"></span>
+            </td>
+            <td style=" padding: 12px 15px;" th:text ="${item.endStart}"></td>
+            <td style=" padding: 12px 15px;" th:text ="${item.dimuon == null ? 'khong' : ${item.dimuon} }"></td>
+            <td style=" padding: 12px 15px;" th:text ="${item.lamthem == null ? 'khong' : ${item.dimuon} }"></td>
         </tr>
         </tbody>
     </table>

@@ -11,8 +11,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -22,6 +24,7 @@ public class TimekeepingDTO {
     private Long id;
     private Date timeStart;
     private Date endStart;
+    private String DateWork;
     private Long lamthem;
     private Long dimuon;
     private Long vesom;
@@ -46,6 +49,7 @@ public class TimekeepingDTO {
             this.lamthem = timekeeping.getLamthem();
             this.xinVeSom = timekeeping.getXinVeSom();
             this.is_Active = timekeeping.getIsActive();
+            this.DateWork = new SimpleDateFormat("yyyy-MM-dd").format(timekeeping.getTimeStart());
             if(timekeeping.getStaff() != null){
                 StaffDTO s = new StaffDTO();
                 s.setAddress(timekeeping.getStaff().getAddress());

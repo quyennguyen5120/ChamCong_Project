@@ -83,39 +83,44 @@ public class SalaryServiceImpl implements SalaryService {
             TimekeepingDTO timekeepingDTO = new TimekeepingDTO(t);
             timekeepingDTOList.add(timekeepingDTO);
         });
+
         double heSoLuong = 0;
-        StaffEntity staffEntity = staffRepository.findById(staffId).get();
-        for (TimekeepingDTO t: timekeepingDTOList){
-            if(t.getEndStart() == null)//####
-                continue;
-            LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
-            LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
-
-            double timesBetween = Duration.between(startTime, endTime).toMinutes();
-            timesBetween = timesBetween / 60;
-
-            if (timesBetween > 8)
-                timesBetween = 8;
-            if (t.getDimuon() != null)
-                timesBetween -= t.getDimuon().doubleValue() / 60;
-            if (t.getXinLamThem() != null){
-                if (t.getXinLamThem())
-                    timesBetween += t.getLamthem().doubleValue() / 60;
-            }
-            if (t.getXinVeSom() != null){
-                if (!t.getXinVeSom())
-                    timesBetween -= t.getVesom().doubleValue() / 60;
-            } else {
-                if (t.getVesom() != null)
-                    timesBetween -= t.getVesom().doubleValue() / 60;
-            }
-
-            heSoLuong += timesBetween / 8;
-        }
         double luong = 0D;
+
+        StaffEntity staffEntity = staffRepository.findById(staffId).get();
+        StaffDTO staffDTO = new StaffDTO(staffEntity);
+
+        for (TimekeepingDTO t: timekeepingDTOList){
+            if(t.getEndStart() != null) {
+                LocalDateTime startTime = LocalDateTime.ofInstant(t.getTimeStart().toInstant(), ZoneId.systemDefault());
+                LocalDateTime endTime = LocalDateTime.ofInstant(t.getEndStart().toInstant(), ZoneId.systemDefault());
+
+                double timesBetween = Duration.between(startTime, endTime).toMinutes();
+                timesBetween = timesBetween / 60;
+
+                if (timesBetween > 8)
+                    timesBetween = 8;
+                if (t.getDimuon() != null)
+                    timesBetween -= t.getDimuon().doubleValue() / 60;
+                if (t.getXinLamThem() != null) {
+                    if (t.getXinLamThem())
+                        timesBetween += t.getLamthem().doubleValue() / 60;
+                }
+                if (t.getXinVeSom() != null) {
+                    if (!t.getXinVeSom())
+                        timesBetween -= t.getVesom().doubleValue() / 60;
+                } else {
+                    if (t.getVesom() != null)
+                        timesBetween -= t.getVesom().doubleValue() / 60;
+                }
+
+                heSoLuong += timesBetween / 8;
+            }
+        }
+
         if(staffEntity.getSalaryEntity() != null)//####
             luong = heSoLuong * staffEntity.getSalaryEntity().getSalary();
-        StaffDTO staffDTO = new StaffDTO(staffEntity);
+
         return new StaffSalaryDTO(staffDTO, heSoLuong, luong);
     }
 

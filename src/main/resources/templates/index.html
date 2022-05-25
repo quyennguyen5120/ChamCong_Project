@@ -56,8 +56,8 @@
                 <span th:text="${item.timeStart}"></span>
             </td>
             <td style=" padding: 12px 15px;" th:text ="${item.endStart}"></td>
-            <td style=" padding: 12px 15px;" th:text ="${item.dimuon == null ? 'khong' : ${item.dimuon} }"></td>
-            <td style=" padding: 12px 15px;" th:text ="${item.lamthem == null ? 'khong' : ${item.dimuon} }"></td>
+            <td style=" padding: 12px 15px;" th:text ="${item.dimuon != null ? 'khong' : ${item.dimuon} }"></td>
+            <td style=" padding: 12px 15px;" th:text ="${item.lamthem != null ? 'khong' : ${item.dimuon} }"></td>
         </tr>
         </tbody>
     </table>
